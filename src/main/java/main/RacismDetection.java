@@ -25,10 +25,9 @@ public class RacismDetection {
     public void checkForNigger(Message message) {
         String rawMessage = message.getContentRaw();
         String id = message.getAuthor().getId();
+        String filePath = "Commands/RacistMsgHistory/" + id + ".txt";
 
-        rawMessage = Normalizer.normalize(rawMessage, Normalizer.Form.NFD);
-        rawMessage = rawMessage.replaceAll("[^A-za-z1]", "").toLowerCase();
-        if(rawMessage.contains("nigg") || rawMessage.contains("n1g") || rawMessage.contains("nlg")){
+        if(containsWord(rawMessage)){
             RestAction action = message.delete();
             message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
             logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
@@ -42,18 +41,19 @@ public class RacismDetection {
             String line;
             while((line = br.readLine()) != null){
                 if(line.contains(message.getAuthor().getId())){
-                    FileWriter fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", true);
+                    FileWriter fw = new FileWriter(filePath, true);
                     fw.write(message.getContentRaw() + "\n");
                     fw.close();
 
-                    fr = new FileReader("Commands/RacistMsgHistory/" + id + ".txt");
+                    fr = new FileReader(filePath);
                     br = new BufferedReader(fr);
                     Queue<String> queue = new LinkedList<>();
                     while((line = br.readLine()) != null){
                         queue.add(line);
                     }
+
                     String full = "";
-                    fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", false);
+                    fw = new FileWriter(filePath, false);
                     for(int i = 0; i < msgHistoryToKeep; i++){
                         if(queue.size() > 0) {
                             line = queue.remove();
@@ -64,9 +64,7 @@ public class RacismDetection {
 
                     fw.close();
 
-                    full = Normalizer.normalize(full, Normalizer.Form.NFD);
-                    full = full.replaceAll("[^A-za-z1]", "").toLowerCase();
-                    if(full.contains("nigg") || full.contains("n1g") || full.contains("nlg")) {
+                    if(containsWord(full)){
                         message.getChannel().sendMessage("Hey <@" + id + "> you can't say that, not even vertical").queue();
                         logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
 
@@ -76,7 +74,7 @@ public class RacismDetection {
                             action.complete();
                         }
 
-                        fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", false);
+                        fw = new FileWriter(filePath, false);
                         fw.write("");
                         fw.close();
                     }
@@ -87,8 +85,11 @@ public class RacismDetection {
         }catch (IOException e){
             logger.createErrorLog("some racist broke it " + e.getMessage());
         }
+    }
 
-
-
+    private boolean containsWord(String message){
+        message = Normalizer.normalize(message, Normalizer.Form.NFD);
+        message = message.replaceAll("[^A-za-z1]", "").toLowerCase();
+        return message.contains("nigg") || message.contains("n1g") || message.contains("nlg");
     }
 }
