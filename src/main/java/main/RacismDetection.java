@@ -30,7 +30,7 @@ public class RacismDetection {
         if(containsWord(rawMessage)){
             RestAction action = message.delete();
             message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
-            logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
+            logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word");
             action.complete();
             return;
         }
@@ -65,7 +65,7 @@ public class RacismDetection {
 
                     if(containsWord(full)){
                         message.getChannel().sendMessage("Hey <@" + id + "> you can't say that, not even vertical").queue();
-                        logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
+                        logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word");
 
                         List<Message> messages = message.getTextChannel().getIterableHistory().stream().limit(6).filter(m -> m.getAuthor().getId().equals(id)).collect(Collectors.toList());
                         for(Message m: messages){
