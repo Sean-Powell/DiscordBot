@@ -22,7 +22,7 @@ public class RacismDetection {
         this.logger = logger;
     }
 
-    public void checkForNigger(Message message) {
+    public void checkForNWord(Message message) {
         String rawMessage = message.getContentRaw();
         String id = message.getAuthor().getId();
         String filePath = "Commands/RacistMsgHistory/" + id + ".txt";
@@ -51,7 +51,6 @@ public class RacismDetection {
                     while((line = br.readLine()) != null){
                         queue.add(line);
                     }
-
                     String full = "";
                     fw = new FileWriter(filePath, false);
                     for(int i = 0; i < msgHistoryToKeep; i++){
@@ -74,7 +73,7 @@ public class RacismDetection {
                             action.complete();
                         }
 
-                        fw = new FileWriter(filePath, false);
+                        fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", false);
                         fw.write("");
                         fw.close();
                     }

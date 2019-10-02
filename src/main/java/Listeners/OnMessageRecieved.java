@@ -15,8 +15,6 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class OnMessageRecieved extends ListenerAdapter {
     private ArrayList<Command> commands = new ArrayList<>();
