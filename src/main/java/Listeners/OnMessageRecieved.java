@@ -4,6 +4,8 @@ import Commands.*;
 import Logging.Logger;
 import YoutubeIntergration.PlayLink;
 import main.Member;
+
+import main.RacismDetection;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -11,11 +13,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OnMessageRecieved extends ListenerAdapter {
     private ArrayList<Command> commands = new ArrayList<>();
@@ -27,15 +28,19 @@ public class OnMessageRecieved extends ListenerAdapter {
     private ArrayList<String> bannedFromDF = new ArrayList<>();
     private File bannedFromDFFile = new File("Commands/bannedFromDeepFrying.txt");
 
+
     private BanPhrase bannedPhrases;
     private CleanseChannel cleanseChannel;
     private PlayLink playLink;
+    private RacismDetection racismDetection;
 
     public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link) throws Exception{
         this.playLink = link;
         this.logger = logger;
         this.admins = admins;
         this.members = members;
+        this.racismDetection = new RacismDetection(logger);
+
         bot = getMember("bot");
         if(bot == null){
             logger.createErrorLog("bots id could not be found in the members list");
@@ -95,7 +100,7 @@ public class OnMessageRecieved extends ListenerAdapter {
     }
 
     private void addMessageContainmentChecks(Message message, MessageReceivedEvent event){
-        checkForNigger(message);
+        racismDetection.checkForNigger(message);
         checkForBannedPhrase(message);
         checkForDeepFry(message, event);
         checkForAlexGif(message);
@@ -149,7 +154,7 @@ public class OnMessageRecieved extends ListenerAdapter {
     private void checkForBannedPhrase(Message message){
         if(bannedPhrases.checkString(message)){
             RestAction action = message.delete();
-            message.getChannel().sendMessage("Hey <@ " + message.getAuthor().getId() + "> that message contained a banned phrase sorry").queue();
+            message.getChannel().sendMessage("Hey <@" + message.getAuthor().getId() + "> that message contained a banned phrase sorry").queue();
             logger.createLog("Deleted message for containing banned phrase " + message);
             action.complete();
         }
@@ -189,14 +194,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         return author.getId().equals(bot.getId());
     }
 
-    private void checkForNigger(Message message) {
-        if(message.getContentRaw().toLowerCase().matches("n+\\s*[i1]+\\s*g+\\s*g+\\s*[ea3]+\\s*r*+\\s*")){
-            RestAction action = message.delete();
-            message.getChannel().sendMessage("Hey <@" + message.getAuthor().getId() + "> you can't say that").queue();
-            logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
-            action.complete();
-        }
-    }
+
 
     private Member getMember(String name){
         for(Member member: members){

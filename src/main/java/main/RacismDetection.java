@@ -1,0 +1,94 @@
+package main;
+
+import Logging.Logger;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.requests.RestAction;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.Normalizer;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
+
+public class RacismDetection {
+    private Logger logger;
+    private final int msgHistoryToKeep = 20;
+
+    public RacismDetection(Logger logger){
+        this.logger = logger;
+    }
+
+    public void checkForNigger(Message message) {
+        String rawMessage = message.getContentRaw();
+        String id = message.getAuthor().getId();
+
+        rawMessage = Normalizer.normalize(rawMessage, Normalizer.Form.NFD);
+        rawMessage = rawMessage.replaceAll("[^A-za-z1]", "").toLowerCase();
+        if(rawMessage.contains("nigg") || rawMessage.contains("n1g") || rawMessage.contains("nlg")){
+            RestAction action = message.delete();
+            message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
+            logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
+            action.complete();
+            return;
+        }
+
+        try {
+            FileReader fr = new FileReader("Commands/racist.txt");
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while((line = br.readLine()) != null){
+                if(line.contains(message.getAuthor().getId())){
+                    FileWriter fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", true);
+                    fw.write(message.getContentRaw() + "\n");
+                    fw.close();
+
+                    fr = new FileReader("Commands/RacistMsgHistory/" + id + ".txt");
+                    br = new BufferedReader(fr);
+                    Queue<String> queue = new LinkedList<>();
+                    while((line = br.readLine()) != null){
+                        queue.add(line);
+                    }
+                    String full = "";
+                    fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", false);
+                    for(int i = 0; i < msgHistoryToKeep; i++){
+                        if(queue.size() > 0) {
+                            line = queue.remove();
+                            full = full + line;
+                            fw.write(line + "\n");
+                        }
+                    }
+
+                    fw.close();
+
+                    full = Normalizer.normalize(full, Normalizer.Form.NFD);
+                    full = full.replaceAll("[^A-za-z1]", "").toLowerCase();
+                    if(full.contains("nigg") || full.contains("n1g") || full.contains("nlg")) {
+                        message.getChannel().sendMessage("Hey <@" + id + "> you can't say that, not even vertical").queue();
+                        logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing nigger");
+
+                        List<Message> messages = message.getTextChannel().getIterableHistory().stream().limit(6).filter(m -> m.getAuthor().getId().equals(id)).collect(Collectors.toList());
+                        for(Message m: messages){
+                            RestAction action = m.delete();
+                            action.complete();
+                        }
+
+                        fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", false);
+                        fw.write("");
+                        fw.close();
+                    }
+                }
+            }
+            br.close();
+            fr.close();
+        }catch (IOException e){
+            logger.createErrorLog("some racist broke it " + e.getMessage());
+        }
+
+
+
+    }
+}

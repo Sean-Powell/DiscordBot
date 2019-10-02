@@ -11,6 +11,7 @@ public class BanPhrase extends Command{
 
     public BanPhrase(Logger logger, String keyword, String description) {
         super(logger, keyword, description);
+        this.logger = logger;
     }
 
     public void function(Message message){
@@ -18,11 +19,10 @@ public class BanPhrase extends Command{
             FileWriter fileWriter = new FileWriter(bannedPhrases);
             String rawMessage = message.getContentRaw();
             String[] toBan = rawMessage.split(getKeyword());
-            String banned = toBan[1].substring(1); //todo validate that this works.
+            String banned = toBan[1].substring(1);
 
             fileWriter.write(banned + "\n");
             logger.createLog("added new banned phrase " + banned + " to the ban list");
-            fileWriter.flush();
             fileWriter.close();
         }catch (IOException e){
             String toSend = "There was an error adding that word to the ban list";

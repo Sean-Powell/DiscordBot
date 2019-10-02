@@ -13,6 +13,7 @@ public class CleanseChannel extends Command{
 
     public CleanseChannel(Logger logger, String keyword, String description) {
         super(logger, keyword, description);
+        messageLimit = 100;
     }
 
     public void function(Message message) {
