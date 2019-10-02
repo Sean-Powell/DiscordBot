@@ -24,7 +24,7 @@ public class OnMessageRecieved extends ListenerAdapter {
     private Member bot;
 
     private ArrayList<String> bannedFromDF = new ArrayList<>();
-    private File bannedFromDFFile = new File("Commands/bannedFromDeepFrying.txt");
+    private File bannedFromDFFile = new File("TextFiles/Commands/bannedFromDeepFrying.txt");
 
 
     private BanPhrase bannedPhrases;
@@ -131,7 +131,7 @@ public class OnMessageRecieved extends ListenerAdapter {
 
     private void checkForYTKeyword(Message message){
         String rawMessage = message.getContentRaw();
-        File file = new File("Commands/youtubeLinks.txt");
+        File file = new File("TextFiles/Commands/youtubeLinks.txt");
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -144,6 +144,8 @@ public class OnMessageRecieved extends ListenerAdapter {
                     playLink.loadAndPlay(message.getTextChannel(), lineSplit[1]);
                 }
             }
+            br.close();
+            fr.close();
         }catch (IOException e){
             logger.createErrorLog("error in checking youtube keywords " + e.getMessage());
         }

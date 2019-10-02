@@ -4,8 +4,14 @@ import Logging.Logger;
 import YoutubeIntergration.PlayLink;
 import net.dv8tion.jda.api.entities.Message;
 
+import java.io.File;
+import java.io.FileWriter;
+
+
 public class Volume extends Command {
     private  PlayLink playLink;
+    private File file = new File("TextFiles/Commands/volume.txt");
+
     public Volume(Logger logger, String keyword, String description, PlayLink playLink){
         super(logger, keyword, description);
         this.playLink = playLink;
@@ -24,6 +30,9 @@ public class Volume extends Command {
                 return;
             }
             playLink.volume(message.getTextChannel(), volume);
+            FileWriter fw = new FileWriter(file, false);
+            fw.write("" + volume);
+            fw.close();
             getLogger().createLog("set the volume to " + volume);
         }catch (Exception e){
             getLogger().createErrorLog("setting the volume " + e.getMessage());

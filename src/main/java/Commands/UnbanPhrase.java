@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class UnbanPhrase extends Command {
 
-    private File bannedPhrases = new File("Commands/bannedPhrases.txt");
+    private File bannedPhrases = new File("TextFiles/Commands/bannedPhrases.txt");
 
     public UnbanPhrase(Logger logger, String keyword, String description) {
         super(logger, keyword, description);

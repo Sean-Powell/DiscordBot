@@ -37,10 +37,10 @@ import java.util.Map;
 //todo add youtube keyword to play a video
 
 public class Main extends ListenerAdapter {
-    private static File configFile = new File("config.txt");
+    private static File configFile = new File("TextFiles/config.txt");
     private static BufferedReader configBR;
-    private static File membersFile = new File("members.txt");
-    private static Logger logger = new Logger("Log.txt");
+    private static File membersFile = new File("TextFiles/members.txt");
+    private static Logger logger = new Logger("TextFiles/Log.txt");
     private static PlayLink link;
     private static SendMessage sm;
 

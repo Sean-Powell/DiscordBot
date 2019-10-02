@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 import java.io.*;
 
 public class AddYoutubeKeyword extends Command {
-    private File file = new File("Commands/youtubeLinks.txt");
+    private File file = new File("TextFiles/Commands/youtubeLinks.txt");
 
     public AddYoutubeKeyword(Logger logger, String keyword, String description){
         super(logger, keyword, description);
@@ -45,7 +45,7 @@ public class AddYoutubeKeyword extends Command {
             br.close();
             fr.close();
             FileWriter fw = new FileWriter(file, true);
-            fw.write(name + "," + link);
+            fw.write(name + "," + link + "\n");
             fw.close();
             String toSend = "Created a youtube link with the keyword " + name;
             getLogger().createLog(toSend + " to " + link);

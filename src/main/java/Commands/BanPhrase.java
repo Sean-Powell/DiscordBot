@@ -6,7 +6,7 @@ import Logging.Logger;
 import net.dv8tion.jda.api.entities.Message;
 
 public class BanPhrase extends Command{
-    private File bannedPhrases = new File("Commands/bannedPhrases.txt");
+    private File bannedPhrases = new File("TextFiles/Commands/bannedPhrases.txt");
     private Logger logger;
 
     public BanPhrase(Logger logger, String keyword, String description) {

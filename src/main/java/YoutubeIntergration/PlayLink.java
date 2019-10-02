@@ -11,19 +11,38 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayLink {
 
+    private File file = new File("TextFiles/Commands/volume.txt");
+
     private final AudioPlayerManager playerManager;
     private final Map<Long, GuildMusicManager> musicManagers;
     private Logger logger;
+    private int volume = 50;
 
     public PlayLink(Logger logger){
         this.logger = logger;
         this.musicManagers = new HashMap<>();
         this.playerManager = new DefaultAudioPlayerManager();
+
+        try{
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line = br.readLine();
+            this.volume = Integer.parseInt(line);
+            br.close();
+            fr.close();
+        }catch (IOException e){
+            logger.createErrorLog("setting the volume at " + e.getMessage());
+        }
+
         AudioSourceManagers.registerRemoteSources(playerManager);
         AudioSourceManagers.registerLocalSource(playerManager);
     }
@@ -34,6 +53,7 @@ public class PlayLink {
 
         if(musicManager == null){
             musicManager = new GuildMusicManager(playerManager);
+            musicManager.player.setVolume(volume);
             musicManagers.put(guildID, musicManager);
         }
 

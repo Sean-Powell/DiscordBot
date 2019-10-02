@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class RemoveYoutubeKeyword extends Command{
-    File file = new File("Commands/youtubeLinks.txt");
+    File file = new File("TextFiles/Commands/youtubeLinks.txt");
     public RemoveYoutubeKeyword(Logger logger, String keyword, String description){
         super(logger, keyword, description);
     }

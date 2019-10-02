@@ -25,7 +25,7 @@ public class RacismDetection {
     public void checkForNWord(Message message) {
         String rawMessage = message.getContentRaw();
         String id = message.getAuthor().getId();
-        String filePath = "Commands/RacistMsgHistory/" + id + ".txt";
+        String filePath = "TextFiles/Commands/RacistMsgHistory/" + id + ".txt";
 
         if(containsWord(rawMessage)){
             RestAction action = message.delete();
@@ -36,7 +36,7 @@ public class RacismDetection {
         }
 
         try {
-            FileReader fr = new FileReader("Commands/racist.txt");
+            FileReader fr = new FileReader("TextFiles/Commands/racist.txt");
             BufferedReader br = new BufferedReader(fr);
             String line;
             while((line = br.readLine()) != null){
@@ -73,7 +73,7 @@ public class RacismDetection {
                             action.complete();
                         }
 
-                        fw = new FileWriter("Commands/RacistMsgHistory/" + id + ".txt", false);
+                        fw = new FileWriter("TextFiles/Commands/RacistMsgHistory/" + id + ".txt", false);
                         fw.write("");
                         fw.close();
                     }

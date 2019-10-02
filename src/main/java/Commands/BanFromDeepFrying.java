@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 import java.io.*;
 
 public class BanFromDeepFrying extends Command {
-    private File file = new File("Commands/bannedFromDeepFrying.txt");
+    private File file = new File("TextFiles/Commands/bannedFromDeepFrying.txt");
     public BanFromDeepFrying(Logger logger, String keyword, String description){
         super(logger, keyword, description);
     }
