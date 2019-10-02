@@ -100,7 +100,7 @@ public class OnMessageRecieved extends ListenerAdapter {
     }
 
     private void addMessageContainmentChecks(Message message, MessageReceivedEvent event){
-        racismDetection.checkForNigger(message);
+        racismDetection.checkForNWord(message);
         checkForBannedPhrase(message);
         checkForDeepFry(message, event);
         checkForAlexGif(message);
