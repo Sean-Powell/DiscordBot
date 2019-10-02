@@ -4,12 +4,12 @@ import Commands.*;
 import Logging.Logger;
 import YoutubeIntergration.PlayLink;
 import main.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.RestAction;
-import net.dv8tion.jda.core.requests.restaction.AuditableRestAction;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,9 +29,10 @@ public class OnMessageRecieved extends ListenerAdapter {
 
     private BanPhrase bannedPhrases;
     private CleanseChannel cleanseChannel;
-    private PlayLink playLink = new PlayLink();
+    private PlayLink playLink;
 
-    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins) throws Exception{
+    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link) throws Exception{
+        this.playLink = link;
         this.logger = logger;
         this.admins = admins;
         this.members = members;
@@ -72,6 +73,8 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new Help(logger, "help", commands, ",help - displays the help page"));
         commands.add(new AddYoutubeKeyword(logger, "ytadd", ",ytadd 'name' 'link' - creates a new keyword that when typed will play that youtube video in the users channel"));
         commands.add(new RemoveYoutubeKeyword(logger, "ytremove", ",ytremove 'name' - removes the keyword from the list"));
+        commands.add(new Skip(logger, "skip", ",skip - skips the currently playing track", playLink));
+        commands.add(new Volume(logger, "volume", ",volume 'volume' - sets the volume to the number provided, range 0-100", playLink));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){
@@ -108,13 +111,13 @@ public class OnMessageRecieved extends ListenerAdapter {
                     replaceAll("[-_+^()<{}&%$¦£\\[\\]€\"!>:;,\\\\/*~#|@]", "");
 
             if (rawMessagesSpacesRemoved.contains(".df")){
-                AuditableRestAction result = event.getGuild().getController().kick(authorID);
+                AuditableRestAction result = event.getGuild().kick(authorID);
                 String messageToSend = "<@" + authorID + "> you are banned from deep frying";
                 logger.createLog("kicking " + message.getAuthor().getName() + " for deep frying while banned");
                 message.getTextChannel().sendMessage(messageToSend).queue();
                 result.submit();
             }else if(rawMessageSymbolsRemoved.contains(".df")){
-                AuditableRestAction result = event.getGuild().getController().kick(authorID);
+                AuditableRestAction result = event.getGuild().kick(authorID);
                 String messageToSend = "<@ " + authorID + "> nice attempt but you are still banned from deep frying";
                 logger.createLog("kicking " + message.getAuthor().getName() + " for deep frying, attempted to get around the ban");
                 message.getTextChannel().sendMessage(messageToSend).queue();
@@ -134,7 +137,8 @@ public class OnMessageRecieved extends ListenerAdapter {
             while ((line = br.readLine()) != null) {
                 String[] lineSplit = line.split(",");
                 if(rawMessage.contains(lineSplit[0])){
-                    playLink.play(message, lineSplit[1]);
+                    System.out.println("found yt keyword");
+                    playLink.loadAndPlay(message.getTextChannel(), lineSplit[1]);
                 }
             }
         }catch (IOException e){

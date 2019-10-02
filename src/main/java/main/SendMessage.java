@@ -1,6 +1,6 @@
 package main;
 
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.w3c.dom.Text;
 
 public class SendMessage {

@@ -1,9 +1,9 @@
 package Commands;
 
 import Logging.Logger;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.requests.RestAction;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.List;
 import java.util.stream.Collectors;

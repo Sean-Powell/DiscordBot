@@ -1,8 +1,7 @@
 package Commands;
 
 import Logging.Logger;
-import com.sun.jna.platform.win32.OaIdl;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.io.*;
 

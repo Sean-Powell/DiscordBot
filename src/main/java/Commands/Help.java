@@ -1,7 +1,7 @@
 package Commands;
 
 import Logging.Logger;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
 

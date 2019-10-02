@@ -3,11 +3,25 @@ package main;
 import Listeners.OnMessageRecieved;
 import Listeners.OnUsernameUpdate;
 import Logging.Logger;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import YoutubeIntergration.GuildMusicManager;
+import YoutubeIntergration.PlayLink;
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sun.jna.platform.win32.Guid;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
@@ -15,6 +29,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //todo add command to add a new member
 //todo add command to raise a user to an admin
@@ -25,6 +41,7 @@ public class Main extends ListenerAdapter {
     private static BufferedReader configBR;
     private static File membersFile = new File("members.txt");
     private static Logger logger = new Logger("Log.txt");
+    private static PlayLink link;
     private static SendMessage sm;
 
     private static JDA jda;
@@ -32,6 +49,8 @@ public class Main extends ListenerAdapter {
 
     private static ArrayList<Member> members = new ArrayList<>();
     private static ArrayList<String> admins = new ArrayList<>();
+
+
 
     public static void main(String[] args) {
         logger.createLog("Starting up...");
@@ -43,8 +62,12 @@ public class Main extends ListenerAdapter {
         setupJDA();
         setupSendMessage();
         setupLogger();
+        setupYoutubeIntergration();
         addListeners();
+    }
 
+    private static void setupYoutubeIntergration() {
+         link = new PlayLink(logger);
     }
 
     private static void setupConfig(){
@@ -121,7 +144,7 @@ public class Main extends ListenerAdapter {
     private static void addListeners(){
         try {
             jda.addEventListener(new OnUsernameUpdate(logger, sm, members));
-            jda.addEventListener(new OnMessageRecieved(logger, members, admins));
+            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link));
         }catch (Exception e){
             logger.createErrorLog("unknown exception " + e.getMessage());
         }

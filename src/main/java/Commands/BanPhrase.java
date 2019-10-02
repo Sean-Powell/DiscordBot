@@ -3,7 +3,7 @@ package Commands;
 import java.io.*;
 
 import Logging.Logger;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 public class BanPhrase extends Command{
     private File bannedPhrases = new File("Commands/bannedPhrases.txt");

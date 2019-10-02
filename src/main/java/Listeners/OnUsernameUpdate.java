@@ -4,10 +4,10 @@ import FileManagement.FileFunctions;
 import Logging.Logger;
 import main.SendMessage;
 import main.Member;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberNickChangeEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.restaction.AuditableRestAction;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -42,9 +42,10 @@ public class OnUsernameUpdate extends ListenerAdapter {
         }
     }
 
-    public void onGuildMemberNickChange(GuildMemberNickChangeEvent event){
-        String newName = event.getNewNick();
-        String oldName = event.getPrevNick();
+
+    public void onGuildMemberUpdateNickname(GuildMemberUpdateNicknameEvent event){
+        String newName = event.getNewNickname();
+        String oldName = event.getOldNickname();
         User user = event.getUser();
         String id = user.getId();
         String message;
@@ -58,7 +59,7 @@ public class OnUsernameUpdate extends ListenerAdapter {
                 }
                 message += "that name has been used before.";
                 logger.createLog("kicking user");
-                AuditableRestAction result = event.getGuild().getController().kick(id);
+                AuditableRestAction result = event.getGuild().kick(id);
                 result.submit();
             }else{
                 addName(id, newName);
