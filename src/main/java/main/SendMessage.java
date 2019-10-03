@@ -5,7 +5,7 @@ import org.w3c.dom.Text;
 
 public class SendMessage {
     private TextChannel channel;
-    SendMessage(TextChannel channel){
+    public SendMessage(TextChannel channel){
         this.channel = channel;
     }
 

@@ -1,27 +1,17 @@
-package main;
-
 import Listeners.OnMessageRecieved;
 import Listeners.OnUsernameUpdate;
 import Logging.Logger;
-import YoutubeIntergration.GuildMusicManager;
+
 import YoutubeIntergration.PlayLink;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sun.jna.platform.win32.Guid;
+
+
+import main.Member;
+import main.SendMessage;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
@@ -29,14 +19,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-//todo add command to add a new member
-//todo add command to raise a user to an admin
-//todo add youtube keyword to play a video
 
-public class Main extends ListenerAdapter {
+public class DiscordBot extends ListenerAdapter {
     private static File configFile = new File("TextFiles/config.txt");
     private static BufferedReader configBR;
     private static File membersFile = new File("TextFiles/members.txt");

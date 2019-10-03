@@ -5,7 +5,7 @@ public class Member {
     private String name;
     private boolean isAdmin;
 
-    Member(String id, String name, boolean isAdmin){
+    public Member(String id, String name, boolean isAdmin){
         this.id = id;
         this.name = name;
         this.isAdmin = isAdmin;
@@ -19,7 +19,7 @@ public class Member {
         return name;
     }
 
-    boolean isAdmin() {
+    public boolean isAdmin() {
         return isAdmin;
     }
 }
