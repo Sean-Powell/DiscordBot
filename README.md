@@ -1,4 +1,7 @@
 [license]: https://github.com/Sean-Powell/DiscordBot/blob/master/LICENSE
+[license-shield]: https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg
+[ ![license-shield][] ][license]
+
 # A Discord Bot
 A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even in a vertical manner. Also has the ability to create links between words and youtube videos then whenever that word is typed the link is played in the channel that user is in.
 
