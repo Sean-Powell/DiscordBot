@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class MakeAdmin extends Command {
     private File file = new File("members.txt");
-    public MakeAdmin(Logger logger, String keyword, String description){
-        super(logger, keyword, description);
+    public MakeAdmin(Logger logger, String keyword, String description, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
     }
 
     @Override

@@ -120,19 +120,4 @@ public class PlayLink {
             }
         }
     }
-
-//    public void play(Message message, String link) {
-//        System.out.println(link);
-//        User author = message.getAuthor();
-//        List<VoiceChannel> voiceChannels = message.getGuild().getVoiceChannels();
-//
-//        Guild guild = message.getGuild();
-//        AudioManager manager = guild.getAudioManager();
-//        manager.setSendingHandler(new AudioPlayerSendHandler());
-//        for(VoiceChannel channel: voiceChannels){
-////            channel.get
-//        }
-//    }
-
-
 }

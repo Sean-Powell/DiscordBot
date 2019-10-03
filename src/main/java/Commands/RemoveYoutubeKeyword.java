@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class RemoveYoutubeKeyword extends Command{
     File file = new File("TextFiles/Commands/youtubeLinks.txt");
-    public RemoveYoutubeKeyword(Logger logger, String keyword, String description){
-        super(logger, keyword, description);
+    public RemoveYoutubeKeyword(Logger logger, String keyword, String description, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
     }
 
     @Override

@@ -8,8 +8,8 @@ import java.io.*;
 
 public class AddMember extends Command{
     private File file = new File("members.txt");
-    public AddMember(Logger logger, String keyword, String description){
-        super(logger, keyword, description);
+    public AddMember(Logger logger, String keyword, String description, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
     }
 
     @Override

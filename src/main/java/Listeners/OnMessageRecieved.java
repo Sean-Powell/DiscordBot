@@ -62,22 +62,24 @@ public class OnMessageRecieved extends ListenerAdapter {
     }
 
     private void addCommands(){ //todo add the rest of the commands
-        bannedPhrases = new BanPhrase(logger, "ban", ",ban 'phrase' - bans a phrase from being used");
-        cleanseChannel = new CleanseChannel(logger, "cleanse", ",cleanse text - clears all occurances of the text in the channel in the last 'limit' messages");
+        bannedPhrases = new BanPhrase(logger, "ban", " 'phrase' - bans a phrase from being used", true);
+        cleanseChannel = new CleanseChannel(logger, "cleanse", " 'text' - clears all occurrences of the text in the channel in the last 'limit' messages", true);
 
         commands.add(bannedPhrases);
         commands.add(cleanseChannel);
-        commands.add(new UnbanPhrase(logger, "unban", ",unban 'phrase' - unbans a phrase from being used"));
-        commands.add(new SetLimit(logger, "limit", cleanseChannel, ",limit 'limit' - sets the limit for the cleanse command"));
-        commands.add(new BanFromDeepFrying(logger, "dfban", ",dfban @user - bans the user from using deep fryer"));
-        commands.add(new UnbanFromDeepFrying(logger, "dfunban", ",dfunban @user - unbans the user from using deep fryer"));
-        commands.add(new AddMember(logger, "member", ",member @user name - makes a new memember for the user"));
-        commands.add(new MakeAdmin(logger, "admin", ",adming @user - makes a user into an admin"));
-        commands.add(new Help(logger, "help", commands, ",help - displays the help page"));
-        commands.add(new AddYoutubeKeyword(logger, "ytadd", ",ytadd 'name' 'link' - creates a new keyword that when typed will play that youtube video in the users channel"));
-        commands.add(new RemoveYoutubeKeyword(logger, "ytremove", ",ytremove 'name' - removes the keyword from the list"));
-        commands.add(new Skip(logger, "skip", ",skip - skips the currently playing track", playLink));
-        commands.add(new Volume(logger, "volume", ",volume 'volume' - sets the volume to the number provided, range 0-100", playLink));
+        commands.add(new UnbanPhrase(logger, "unban", " 'phrase' - unbans a phrase from being used", true));
+        commands.add(new SetLimit(logger, "limit", cleanseChannel, " 'limit' - sets the limit for the cleanse command", true));
+        commands.add(new BanFromDeepFrying(logger, "dfban", " @user - bans the user from using deep fryer", true));
+        commands.add(new UnbanFromDeepFrying(logger, "dfunban", " @user - unbans the user from using deep fryer", true));
+        commands.add(new AddMember(logger, "member", " @user name - makes a new member entry for the user", true));
+        commands.add(new MakeAdmin(logger, "admin", " @user - makes a user into an admin", true));
+        commands.add(new Help(logger, "help", commands, " - displays the help page", false));
+        commands.add(new AddYoutubeKeyword(logger, "ytadd", " 'name' 'link' - creates a new keyword that when typed will play that youtube video in the users channel", true));
+        commands.add(new RemoveYoutubeKeyword(logger, "ytremove", " 'name' - removes the keyword from the list", true));
+        commands.add(new Skip(logger, "skip", " - skips the currently playing track", playLink, false));
+        commands.add(new Volume(logger, "volume", " 'volume' - sets the volume to the number provided, range 0-100", playLink, false));
+        commands.add(new BanFromNameChanges(logger, "nameban", " @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked", true));
+        commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){
@@ -88,10 +90,11 @@ public class OnMessageRecieved extends ListenerAdapter {
             return;
         }
 
-        if(admins.contains(author.getId())){
+        try{
             String[] messageSplit = rawMessage.split(" ");
-            String keyword = messageSplit[0];
-            checkCommands(keyword, message);
+            checkCommands(messageSplit[0], message);
+        }catch (Exception e){
+            logger.createErrorLog("encountered in the commands check " + e.getMessage());
         }
 
         addMessageContainmentChecks(message, event);
@@ -105,7 +108,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         checkForYTKeyword(message);
     }
 
-    private void checkForDeepFry(Message message, MessageReceivedEvent event){ //todo add method to remove and add people from being blocked from deep frying
+    private void checkForDeepFry(Message message, MessageReceivedEvent event){
         String rawMessage = message.getContentRaw();
         String authorID = message.getAuthor().getId();
         if(bannedFromDF.contains(authorID)){
@@ -162,7 +165,7 @@ public class OnMessageRecieved extends ListenerAdapter {
 
     private void checkCommands(String keyword, Message message){
         for(Command command: commands){
-            if(command.getKeyword().equals(keyword)){
+            if((command.getKeyword().equals(keyword) && !command.getAdminProtected()) || (command.getKeyword().equals(keyword) && admins.contains(message.getAuthor().getId()))){
                 command.function(message);
             }
         }

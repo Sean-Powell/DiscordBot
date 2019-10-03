@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class CleanseChannel extends Command{
     private int messageLimit;
 
-    public CleanseChannel(Logger logger, String keyword, String description) {
-        super(logger, keyword, description);
+    public CleanseChannel(Logger logger, String keyword, String description, Boolean adminProtected) {
+        super(logger, keyword, description, adminProtected);
         messageLimit = 100;
     }
 

@@ -8,11 +8,13 @@ public class Command {
     private String keyword;
     private Logger logger;
     private String description = "";
+    private Boolean adminProtected;
 
-    Command(Logger logger, String keyword, String description){
+    Command(Logger logger, String keyword, String description, Boolean adminProtected){
         this.keyword = symbol + keyword;
         this.logger = logger;
-        this.description = description;
+        this.description = keyword + description;
+        this.adminProtected = adminProtected;
     }
 
     public void function(Message message){
@@ -26,4 +28,6 @@ public class Command {
     public Logger getLogger() { return logger; }
 
     public String getDescription(){ return description; }
+
+    public Boolean getAdminProtected() { return adminProtected; }
 }

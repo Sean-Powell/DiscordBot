@@ -12,8 +12,8 @@ public class Volume extends Command {
     private  PlayLink playLink;
     private File file = new File("TextFiles/Commands/volume.txt");
 
-    public Volume(Logger logger, String keyword, String description, PlayLink playLink){
-        super(logger, keyword, description);
+    public Volume(Logger logger, String keyword, String description, PlayLink playLink, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
         this.playLink = playLink;
     }
 

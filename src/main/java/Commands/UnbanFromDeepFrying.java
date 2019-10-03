@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class UnbanFromDeepFrying extends Command {
     private File file = new File("TextFiles/Commands/bannedFromDeepFrying.txt");
-    public UnbanFromDeepFrying(Logger logger, String keyword, String description){
-        super(logger, keyword, description);
+    public UnbanFromDeepFrying(Logger logger, String keyword, String description, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
     }
 
     @Override

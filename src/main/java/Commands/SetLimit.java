@@ -6,8 +6,8 @@ import net.dv8tion.jda.api.entities.Message;
 public class SetLimit extends Command {
     private CleanseChannel cleanseChannel;
 
-    public SetLimit(Logger logger, String keyword, CleanseChannel cleanseChannel, String description) {
-        super(logger, keyword, description);
+    public SetLimit(Logger logger, String keyword, CleanseChannel cleanseChannel, String description, Boolean adminProtected) {
+        super(logger, keyword, description, adminProtected);
         this.cleanseChannel = cleanseChannel;
     }
 

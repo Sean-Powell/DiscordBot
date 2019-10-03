@@ -8,8 +8,8 @@ import java.io.*;
 public class AddYoutubeKeyword extends Command {
     private File file = new File("TextFiles/Commands/youtubeLinks.txt");
 
-    public AddYoutubeKeyword(Logger logger, String keyword, String description){
-        super(logger, keyword, description);
+    public AddYoutubeKeyword(Logger logger, String keyword, String description, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
     }
 
     @Override

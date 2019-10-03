@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class OnUsernameUpdate extends ListenerAdapter {
-    private String directory = "OnUserNameUpdate/";
+    private String directory = "TextFiles/OnUserNameUpdate/";
     private File targetsFile = new File(directory + "usernameChangesTargets.txt");
 
     private ArrayList<Member> members;

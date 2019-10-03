@@ -9,8 +9,8 @@ public class BanPhrase extends Command{
     private File bannedPhrases = new File("TextFiles/Commands/bannedPhrases.txt");
     private Logger logger;
 
-    public BanPhrase(Logger logger, String keyword, String description) {
-        super(logger, keyword, description);
+    public BanPhrase(Logger logger, String keyword, String description, Boolean adminProtected) {
+        super(logger, keyword, description, adminProtected);
         this.logger = logger;
     }
 

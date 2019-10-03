@@ -6,8 +6,8 @@ import net.dv8tion.jda.api.entities.Message;
 
 public class Skip extends Command{
     private PlayLink playLink;
-    public Skip(Logger logger, String keyword, String description, PlayLink playLink){
-        super(logger, keyword, description);
+    public Skip(Logger logger, String keyword, String description, PlayLink playLink, Boolean adminProtected){
+        super(logger, keyword, description, adminProtected);
         this.playLink = playLink;
     }
 

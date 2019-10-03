@@ -10,8 +10,8 @@ public class UnbanPhrase extends Command {
 
     private File bannedPhrases = new File("TextFiles/Commands/bannedPhrases.txt");
 
-    public UnbanPhrase(Logger logger, String keyword, String description) {
-        super(logger, keyword, description);
+    public UnbanPhrase(Logger logger, String keyword, String description, Boolean adminProtected) {
+        super(logger, keyword, description, adminProtected);
     }
 
     public void function(Message message) {
