@@ -64,7 +64,7 @@ public class DiscordBot extends ListenerAdapter {
         }
     }
 
-    private static String getNextConfigLine(){ //todo add check for end of file, then close the config file
+    private static String getNextConfigLine(){
         try {
             return configBR.readLine();
         }catch (IOException e){
