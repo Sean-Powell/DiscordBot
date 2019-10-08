@@ -18,6 +18,7 @@ A simple discord bot that does some mild moderations such as keeping track of pa
 * ,help - displays the help page
 * ,ytadd 'name' 'link' - creates a new keyword that when typed will play that youtube video in the users channel
 * ,ytremove 'name' - removes the keyword from the list
+* ,ytlist - lists all the YouTube keywords configured on the bot.
 * ,skip - skips the currently playing track
 * ,volume 'volume' - sets the volume to the number provided, range 0-100
 * ,nameban @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked
