@@ -4,10 +4,10 @@ import Logging.Logger;
 import net.dv8tion.jda.api.entities.Message;
 
 public class Command {
-    private static String symbol = ",";
+    private final String symbol = ",";
     private String keyword;
     private Logger logger;
-    private String description = "";
+    private String description;
     private Boolean adminProtected;
 
     Command(Logger logger, String keyword, String description, Boolean adminProtected){

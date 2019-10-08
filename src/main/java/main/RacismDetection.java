@@ -51,19 +51,19 @@ public class RacismDetection {
                     while((line = br.readLine()) != null){
                         queue.add(line);
                     }
-                    String full = "";
+                    StringBuilder full = new StringBuilder();
                     fw = new FileWriter(filePath, false);
                     for(int i = 0; i < msgHistoryToKeep; i++){
                         if(queue.size() > 0) {
                             line = queue.remove();
-                            full = full + line;
+                            full.append(line);
                             fw.write(line + "\n");
                         }
                     }
 
                     fw.close();
 
-                    if(containsWord(full)){
+                    if(containsWord(full.toString())){
                         message.getChannel().sendMessage("Hey <@" + id + "> you can't say that, not even vertical").queue();
                         logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word");
 

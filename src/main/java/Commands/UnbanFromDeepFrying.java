@@ -4,7 +4,6 @@ import Logging.Logger;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.io.*;
-import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class UnbanFromDeepFrying extends Command {
