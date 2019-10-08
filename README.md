@@ -28,6 +28,6 @@ A simple discord bot that does some mild moderations such as keeping track of pa
 ## Made with:
 
 * [Maven](https://maven.apache.org/) - Dependency Management
-* [LavaPlayer](https://github.com/sedmelluq/lavaplayer) - A java audio libary
+* [LavaPlayer](https://github.com/sedmelluq/lavaplayer) - A Java audio library
 * [JDA](https://github.com/DV8FromTheWorld/JDA) - A Java wrapper for Discord
 
