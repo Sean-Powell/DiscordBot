@@ -82,13 +82,13 @@ public class RacismDetection {
             br.close();
             fr.close();
         }catch (IOException e){
-            logger.createErrorLog("some racist broke it " + e.getMessage());
-        }
-    }
+                logger.createErrorLog("some racist broke it " + e.getMessage());
+                }
+                }
 
-    private boolean containsWord(String message){
+private boolean containsWord(String message){ //todo improve the detection method
         message = Normalizer.normalize(message, Normalizer.Form.NFD);
         message = message.replaceAll("[^A-za-z1]", "").toLowerCase();
-        return message.contains("nigg") || message.contains("n1g") || message.contains("nlg");
-    }
+        return message.contains("nigg") || message.contains("nlgg") || message.contains("n1gg");
+        }
 }

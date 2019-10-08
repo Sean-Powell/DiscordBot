@@ -107,6 +107,14 @@ public class PlayLink {
         channel.sendMessage("Skipped to next track.").queue();
     }
 
+    public void clear(TextChannel channel){
+        GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+        for(int i = 0; i < musicManager.scheduler.numberInQueue(); i++){
+            musicManager.scheduler.nextTrack();
+        }
+        channel.sendMessage("Queue cleared").queue();
+    }
+
     public void volume(TextChannel channel, int volume){
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
         musicManager.player.setVolume(volume);

@@ -61,7 +61,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         }
     }
 
-    private void addCommands(){ //todo add the rest of the commands
+    private void addCommands(){
         bannedPhrases = new BanPhrase(logger, "ban", " 'phrase' - bans a phrase from being used", true);
         cleanseChannel = new CleanseChannel(logger, "cleanse", " 'text' - clears all occurrences of the text in the channel in the last 'limit' messages", true);
 
@@ -76,11 +76,12 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new Help(logger, "help", commands, " - displays the help page", false));
         commands.add(new AddYoutubeKeyword(logger, "ytadd", " 'name' 'link' - creates a new keyword that when typed will play that youtube video in the users channel", true));
         commands.add(new RemoveYoutubeKeyword(logger, "ytremove", " 'name' - removes the keyword from the list", true));
+        commands.add(new ListYTKeywords(logger, "ytlist", " - lists all the YouTube keywords", false));
+        commands.add(new Clear(logger, "ytclear", " - clears all queued up youtube links", playLink, false));
         commands.add(new Skip(logger, "skip", " - skips the currently playing track", playLink, false));
         commands.add(new Volume(logger, "volume", " 'volume' - sets the volume to the number provided, range 0-100", playLink, false));
         commands.add(new BanFromNameChanges(logger, "nameban", " @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked", true));
         commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
-        commands.add(new ListYTKeywords(logger, "ytlist", " - lists all the YouTube keywords", false));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){

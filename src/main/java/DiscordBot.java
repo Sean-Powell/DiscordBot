@@ -38,7 +38,6 @@ public class DiscordBot extends ListenerAdapter {
 
 
     public static void main(String[] args) {
-        logger.createLog("Starting up...");
         setupConfig();
         token = getToken();
         getMembers();
@@ -49,6 +48,7 @@ public class DiscordBot extends ListenerAdapter {
         setupLogger();
         setupYoutubeIntergration();
         addListeners();
+        logger.createLog("Starting up...");
     }
 
     private static void setupYoutubeIntergration() {
