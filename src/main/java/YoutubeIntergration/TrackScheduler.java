@@ -30,9 +30,13 @@ public class TrackScheduler extends AudioEventAdapter {
         return queue.size();
     }
 
+    boolean isPlaying(){
+        return player.getPlayingTrack() != null;
+    }
+
     @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason){
-        if(endReason.mayStartNext){
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+        if (endReason.mayStartNext) {
             nextTrack();
         }
     }

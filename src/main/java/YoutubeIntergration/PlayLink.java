@@ -98,7 +98,7 @@ public class PlayLink {
     }
 
     private void play(Guild guild, GuildMusicManager musicManager, AudioTrack track, User author){
-        connectToAuthorsVoiceChannel(guild.getAudioManager(), author);
+        connectToAuthorsVoiceChannel(guild.getAudioManager(), author, guild);
         musicManager.scheduler.queue(track);
     }
 
@@ -110,7 +110,11 @@ public class PlayLink {
 
     public void clear(TextChannel channel){
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
-        for(int i = 0; i < musicManager.scheduler.numberInQueue(); i++){
+        int queueSize = musicManager.scheduler.numberInQueue();
+        if(musicManager.scheduler.isPlaying()){
+            queueSize++;
+        }
+        for(int i = 0; i < queueSize; i++) {
             musicManager.scheduler.nextTrack();
         }
         channel.sendMessage("Queue cleared").queue();
@@ -121,7 +125,7 @@ public class PlayLink {
         musicManager.player.setVolume(volume);
     }
 
-    private static boolean checkIfInChannel(User author, VoiceChannel channel){
+    private boolean checkIfInChannel(User author, VoiceChannel channel){
         if(channel == null){
             return false;
         }
@@ -135,8 +139,11 @@ public class PlayLink {
         return false;
     }
 
-    private static void connectToAuthorsVoiceChannel(AudioManager audioManager, User author){
-        if(!audioManager.isConnected() && !audioManager.isAttemptingToConnect() || (audioManager.isConnected() && !checkIfInChannel(author, audioManager.getConnectedChannel()))){
+    private void connectToAuthorsVoiceChannel(AudioManager audioManager, User author, Guild guild){
+        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
+
+        System.out.println(musicManager.scheduler.numberInQueue());
+        if(!audioManager.isConnected() && !audioManager.isAttemptingToConnect() || (!musicManager.scheduler.isPlaying() && !checkIfInChannel(author, audioManager.getConnectedChannel()))){
             for(VoiceChannel channel: audioManager.getGuild().getVoiceChannels()){
                 if(checkIfInChannel(author, channel)){
                     audioManager.openAudioConnection(channel);
