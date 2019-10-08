@@ -121,14 +121,25 @@ public class PlayLink {
         musicManager.player.setVolume(volume);
     }
 
+    private static boolean checkIfInChannel(User author, VoiceChannel channel){
+        if(channel == null){
+            return false;
+        }
+
+        List<Member> members = channel.getMembers();
+        for(Member member: members){
+            if(member.getUser().getId().equals(author.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static void connectToAuthorsVoiceChannel(AudioManager audioManager, User author){
-        if(!audioManager.isConnected() && !audioManager.isAttemptingToConnect()){
+        if(!audioManager.isConnected() && !audioManager.isAttemptingToConnect() || (audioManager.isConnected() && !checkIfInChannel(author, audioManager.getConnectedChannel()))){
             for(VoiceChannel channel: audioManager.getGuild().getVoiceChannels()){
-                List<Member> members = channel.getMembers();
-                for(Member member: members){
-                    if(member.getUser().getId().equals(author.getId())){
-                        audioManager.openAudioConnection(channel);
-                    }
+                if(checkIfInChannel(author, channel)){
+                    audioManager.openAudioConnection(channel);
                 }
             }
         }
