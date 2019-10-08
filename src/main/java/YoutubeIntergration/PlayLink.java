@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlayLink {
@@ -61,14 +62,14 @@ public class PlayLink {
         return musicManager;
     }
 
-    public void loadAndPlay(final TextChannel channel, final String trackURL){
+    public void loadAndPlay(final TextChannel channel, final User author, final String trackURL){
         GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
 
         playerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 channel.sendMessage("Added to queue " + audioTrack.getInfo().title).queue();
-                play(channel.getGuild(), musicManager, audioTrack);
+                play(channel.getGuild(), musicManager, audioTrack, author);
             }
 
             @Override
@@ -80,7 +81,7 @@ public class PlayLink {
                 }
 
                 channel.sendMessage("Adding to queue " + firstTrack.getInfo().title + " (First track in playlist " + audioPlaylist.getName() + ")").queue();
-                play(channel.getGuild(), musicManager, firstTrack);
+                play(channel.getGuild(), musicManager, firstTrack, author);
             }
 
             @Override
@@ -96,8 +97,8 @@ public class PlayLink {
         });
     }
 
-    private void play(Guild guild, GuildMusicManager musicManager, AudioTrack track){
-        connectToFirstVoiceChannel(guild.getAudioManager());
+    private void play(Guild guild, GuildMusicManager musicManager, AudioTrack track, User author){
+        connectToAuthorsVoiceChannel(guild.getAudioManager(), author);
         musicManager.scheduler.queue(track);
     }
 
@@ -120,11 +121,15 @@ public class PlayLink {
         musicManager.player.setVolume(volume);
     }
 
-    private static void connectToFirstVoiceChannel(AudioManager audioManager){
+    private static void connectToAuthorsVoiceChannel(AudioManager audioManager, User author){
         if(!audioManager.isConnected() && !audioManager.isAttemptingToConnect()){
             for(VoiceChannel channel: audioManager.getGuild().getVoiceChannels()){
-                audioManager.openAudioConnection(channel);
-                break;
+                List<Member> members = channel.getMembers();
+                for(Member member: members){
+                    if(member.getUser().getId().equals(author.getId())){
+                        audioManager.openAudioConnection(channel);
+                    }
+                }
             }
         }
     }

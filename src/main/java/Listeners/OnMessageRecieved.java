@@ -146,7 +146,7 @@ public class OnMessageRecieved extends ListenerAdapter {
                 String[] lineSplit = line.split(",");
                 if(rawMessage.contains(lineSplit[0])){
                     System.out.println("found yt keyword");
-                    playLink.loadAndPlay(message.getTextChannel(), lineSplit[1]);
+                    playLink.loadAndPlay(message.getTextChannel(), message.getAuthor(), lineSplit[1]);
                 }
             }
             br.close();
