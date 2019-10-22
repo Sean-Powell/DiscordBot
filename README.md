@@ -20,6 +20,7 @@ A simple discord bot that does some mild moderations such as keeping track of pa
 * ,ytremove 'name' - removes the keyword from the list
 * ,ytlist - lists all the YouTube keywords configured on the bot.
 * ,skip - skips the currently playing track
+* ,clear - skips all the tracks in the queue and the current track being played
 * ,volume 'volume' - sets the volume to the number provided, range 0-100
 * ,nameban @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked
 * ,nameunban @user - removes the name restrictions on the user
@@ -27,6 +28,6 @@ A simple discord bot that does some mild moderations such as keeping track of pa
 ## Made with:
 
 * [Maven](https://maven.apache.org/) - Dependency Management
-* [LavaPlayer](https://github.com/sedmelluq/lavaplayer) - A java audio libary
+* [LavaPlayer](https://github.com/sedmelluq/lavaplayer) - A Java audio library
 * [JDA](https://github.com/DV8FromTheWorld/JDA) - A Java wrapper for Discord
 
