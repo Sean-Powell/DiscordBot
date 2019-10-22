@@ -1,3 +1,4 @@
+import Listeners.OnGuildVoiceEvents;
 import Listeners.OnMessageRecieved;
 import Listeners.OnUsernameUpdate;
 import Logging.Logger;
@@ -31,6 +32,8 @@ public class DiscordBot extends ListenerAdapter {
 
     private static JDA jda;
     private static String token;
+
+    private static OnGuildVoiceEvents onGuildVoiceEvents;
 
     private static ArrayList<Member> members = new ArrayList<>();
     private static ArrayList<String> admins = new ArrayList<>();
@@ -128,8 +131,10 @@ public class DiscordBot extends ListenerAdapter {
 
     private static void addListeners(){
         try {
+            onGuildVoiceEvents = new OnGuildVoiceEvents(logger);
             jda.addEventListener(new OnUsernameUpdate(logger, sm, members));
-            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link));
+            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents));
+            jda.addEventListener(onGuildVoiceEvents);
         }catch (Exception e){
             logger.createErrorLog("unknown exception " + e.getMessage());
         }

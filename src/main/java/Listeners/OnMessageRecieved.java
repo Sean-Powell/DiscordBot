@@ -26,18 +26,19 @@ public class OnMessageRecieved extends ListenerAdapter {
     private ArrayList<String> bannedFromDF = new ArrayList<>();
     private File bannedFromDFFile = new File("TextFiles/Commands/bannedFromDeepFrying.txt");
 
-
+    private OnGuildVoiceEvents onGuildVoiceEvents;
     private BanPhrase bannedPhrases;
     private CleanseChannel cleanseChannel;
     private PlayLink playLink;
     private RacismDetection racismDetection;
 
-    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link) throws Exception{
+    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents) throws Exception{
         this.playLink = link;
         this.logger = logger;
         this.admins = admins;
         this.members = members;
         this.racismDetection = new RacismDetection(logger);
+        this.onGuildVoiceEvents = onGuildVoiceEvents;
 
         bot = getMember("bot");
         if(bot == null){
@@ -145,8 +146,14 @@ public class OnMessageRecieved extends ListenerAdapter {
             while ((line = br.readLine()) != null) {
                 String[] lineSplit = line.split(",");
                 if(rawMessage.contains(lineSplit[0])){
-                    System.out.println("found yt keyword");
-                    playLink.loadAndPlay(message.getTextChannel(), message.getAuthor(), lineSplit[1]);
+                    if(onGuildVoiceEvents.checkFile(message.getAuthor().getId())){
+                        logger.createLog("user has been in channel for required time");
+                        playLink.loadAndPlay(message.getTextChannel(), message.getAuthor(), lineSplit[1]);
+                    }else{
+                        logger.createLog("user has not been in the channel long enough");
+                        String toSend = "Sorry,  you have not been in that channel long enough\n";
+                        message.getTextChannel().sendMessage(toSend).queue();
+                    }
                 }
             }
             br.close();
