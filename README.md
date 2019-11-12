@@ -1,9 +1,12 @@
 [license]: https://github.com/Sean-Powell/DiscordBot/blob/master/LICENSE
 [license-shield]: https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg
 [ ![license-shield][] ][license]
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1773c4a298ac4dc082b5ff798887868d)](https://www.codacy.com/manual/Sean-Powell/DiscordBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sean-Powell/DiscordBot&amp;utm_campaign=Badge_Grade)
 
 # A Discord Bot
-A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even in a vertical manner. Also has the ability to create links between words and youtube videos then whenever that word is typed the link is played in the channel that user is in.
+A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even in a vertical manner. 
+
+Also has the ability to create links between words and youtube videos then whenever that word is typed the link is played in the channel that user is in. This is provided that the user has been in the channel for the required ammount of time. By default this is 5 seconds, this is to stop people from joining a channel and using a command to annoy the users in that channel.
 
 ## Commands:
 
