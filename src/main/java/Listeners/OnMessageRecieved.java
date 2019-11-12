@@ -83,7 +83,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new Volume(logger, "volume", " 'volume' - sets the volume to the number provided, range 0-100", playLink, false));
         commands.add(new BanFromNameChanges(logger, "nameban", " @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked", true));
         commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
-        commands.add(new ListRacism(logger, "nranks", "Lists a counter of how many times each user has said the n word", false));
+        commands.add(new ListRacism(logger, "nranks", " - Lists a counter of how many times each user has said the n word", false));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){
@@ -110,6 +110,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         checkForDeepFry(message, event);
         checkForAlexGif(message);
         checkForYTKeyword(message);
+        checkForThanks(message);
     }
 
     private void checkForDeepFry(Message message, MessageReceivedEvent event){
@@ -207,7 +208,14 @@ public class OnMessageRecieved extends ListenerAdapter {
         return author.getId().equals(bot.getId());
     }
 
-
+    private void checkForThanks(Message message){
+        String botAt = "<@485897239521132564>";
+        String rawMessage = message.getContentRaw();
+        if(rawMessage.contains(botAt) && rawMessage.toLowerCase().contains("thanks")){
+            RestAction action = message.getTextChannel().sendMessage("You're welcome");
+            action.complete();
+        }
+    }
 
     private Member getMember(String name){
         for(Member member: members){
