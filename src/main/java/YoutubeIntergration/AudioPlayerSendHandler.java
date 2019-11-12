@@ -12,7 +12,6 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 
     AudioPlayerSendHandler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
-
     }
 
     @Override
