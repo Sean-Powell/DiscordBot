@@ -83,6 +83,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new Volume(logger, "volume", " 'volume' - sets the volume to the number provided, range 0-100", playLink, false));
         commands.add(new BanFromNameChanges(logger, "nameban", " @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked", true));
         commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
+        commands.add(new ListRacism(logger, "nranks", "Lists a counter of how many times each user has said the n word", false));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){

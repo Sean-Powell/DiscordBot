@@ -27,6 +27,7 @@ Also has the ability to create links between words and youtube videos then whene
 * ,volume 'volume' - sets the volume to the number provided, range 0-100
 * ,nameban @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked
 * ,nameunban @user - removes the name restrictions on the user
+* ,nranks - lists the users and the amount of times that user has sent the "n word" in the past
 
 ## Made with:
 
