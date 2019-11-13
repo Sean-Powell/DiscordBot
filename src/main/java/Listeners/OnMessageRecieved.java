@@ -211,7 +211,7 @@ public class OnMessageRecieved extends ListenerAdapter {
     private void checkForThanks(Message message){
         String botAt = "<@485897239521132564>";
         String rawMessage = message.getContentRaw();
-        if(rawMessage.contains(botAt) && rawMessage.toLowerCase().contains("thanks")){
+        if(rawMessage.contains(botAt) && (rawMessage.toLowerCase().contains("thanks") || rawMessage.toLowerCase().contains("thank"))){
             RestAction action = message.getTextChannel().sendMessage("You're welcome");
             action.complete();
         }
