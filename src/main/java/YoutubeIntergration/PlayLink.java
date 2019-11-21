@@ -146,6 +146,7 @@ public class PlayLink {
         if(!audioManager.isConnected() && !audioManager.isAttemptingToConnect() || (!musicManager.scheduler.isPlaying() && !checkIfInChannel(author, audioManager.getConnectedChannel()))){
             for(VoiceChannel channel: audioManager.getGuild().getVoiceChannels()){
                 if(checkIfInChannel(author, channel)){
+//                    audioManager.setReceivingHandler(new AudioRecievingManager());
                     audioManager.openAudioConnection(channel);
                 }
             }

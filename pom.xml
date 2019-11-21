@@ -26,44 +26,44 @@
             <version>4.0.0_50</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.deeplearning4j</groupId>-->
-<!--            <artifactId>deeplearning4j-core</artifactId>-->
-<!--            <version>1.0.0-beta3</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.deeplearning4j</groupId>-->
+        <!--            <artifactId>deeplearning4j-core</artifactId>-->
+        <!--            <version>1.0.0-beta3</version>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>org.nd4j</groupId>-->
-<!--            <artifactId>nd4j-native-platform</artifactId>-->
-<!--            <version>1.0.0-beta3</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.nd4j</groupId>-->
+        <!--            <artifactId>nd4j-native-platform</artifactId>-->
+        <!--            <version>1.0.0-beta3</version>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.scala-lang/scala-library &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.scala-lang</groupId>-->
-<!--            <artifactId>scala-library</artifactId>-->
-<!--            <version>2.13.0-M5-6e0cba7</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.scala-lang/scala-library &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.scala-lang</groupId>-->
+        <!--            <artifactId>scala-library</artifactId>-->
+        <!--            <version>2.13.0-M5-6e0cba7</version>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.microsoft.azure.cognitiveservices/azure-cognitiveservices-customvision-training &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.microsoft.azure.cognitiveservices</groupId>-->
-<!--            <artifactId>azure-cognitiveservices-customvision-training</artifactId>-->
-<!--            <version>1.0.2-beta</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.microsoft.azure.cognitiveservices/azure-cognitiveservices-customvision-training &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.microsoft.azure.cognitiveservices</groupId>-->
+        <!--            <artifactId>azure-cognitiveservices-customvision-training</artifactId>-->
+        <!--            <version>1.0.2-beta</version>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.microsoft.azure.cognitiveservices/azure-cognitiveservices-customvision-prediction &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.microsoft.azure.cognitiveservices</groupId>-->
-<!--            <artifactId>azure-cognitiveservices-customvision-prediction</artifactId>-->
-<!--            <version>1.0.2-beta</version>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.microsoft.azure.cognitiveservices/azure-cognitiveservices-customvision-prediction &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.microsoft.azure.cognitiveservices</groupId>-->
+        <!--            <artifactId>azure-cognitiveservices-customvision-prediction</artifactId>-->
+        <!--            <version>1.0.2-beta</version>-->
+        <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>com.squareup.retrofit2</groupId>-->
-<!--            <artifactId>retrofit</artifactId>-->
-<!--            <version>2.5.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.squareup.retrofit2</groupId>-->
+        <!--            <artifactId>retrofit</artifactId>-->
+        <!--            <version>2.5.0</version>-->
+        <!--        </dependency>-->
 
         <!-- https://github.com/sedmelluq/lavaplayer -->
         <dependency>
@@ -71,8 +71,19 @@
             <artifactId>lavaplayer</artifactId>
             <version>1.3.22</version>
         </dependency>
-    </dependencies>
 
+        <dependency>
+            <groupId>edu.cmu.sphinx</groupId>
+            <artifactId>sphinx4-core</artifactId>
+            <version>5prealpha-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+    </dependencies>
 
 
     <repositories>
@@ -86,6 +97,17 @@
             <id>central</id>
             <name>bintray</name>
             <url>http://jcenter.bintray.com</url>
+        </repository>
+
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 

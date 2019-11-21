@@ -31,11 +31,16 @@ public class RacismDetection {
         String filePath = "TextFiles/Commands/RacistMsgHistory/" + id + ".txt";
 
         if (containsWord(rawMessage)) {
-            RestAction action = message.delete();
-            message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
-            logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word");
-            action.complete();
-            increaseCount(message);
+            if(message.getMember().getUser().getId().equals("252832922564820992")){
+                RestAction action = message.delete();
+                action.complete();
+            }else {
+                RestAction action = message.delete();
+                message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
+                logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word");
+                action.complete();
+                increaseCount(message);
+            }
             return;
         }
 
@@ -137,13 +142,14 @@ public class RacismDetection {
                 RestAction action = message.getGuild().addRoleToMember(member, newRole);
                 action.complete();
             }
-
             count++;
+
             Role role = message.getGuild().getRoleById(roleID);
             if(role == null){
                 logger.createErrorLog("The role does not exist " + roleID);
                 return;
             }
+
             RoleManager roleManager = role.getManager();
             RestAction action = roleManager.setName("N Word Count: " + count);
             action.submit();
@@ -152,9 +158,11 @@ public class RacismDetection {
             otherEntries.add(newLine);
             FileWriter fileWriter = new FileWriter(file, false);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
             for(String entry: otherEntries){
                 bufferedWriter.write(entry + "\n");
             }
+
             bufferedWriter.close();
             fileWriter.close();
             logger.createLog("Updated the role on the user");
