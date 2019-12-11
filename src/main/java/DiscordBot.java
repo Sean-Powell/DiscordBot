@@ -1,7 +1,4 @@
-import Listeners.OnGuildVoiceEvents;
-import Listeners.OnMessageRecieved;
-import Listeners.OnMessageUpdate;
-import Listeners.OnUsernameUpdate;
+import Listeners.*;
 import Logging.Logger;
 
 import YoutubeIntergration.PlayLink;
@@ -137,6 +134,8 @@ public class DiscordBot extends ListenerAdapter {
             jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents));
             jda.addEventListener(new OnMessageUpdate(logger));
             jda.addEventListener(onGuildVoiceEvents);
+            jda.addEventListener(new GuildMemberLeave(logger));
+            jda.addEventListener(new GuildMemberJoin(logger));
         }catch (Exception e){
             logger.createErrorLog("unknown exception " + e.getMessage());
         }
