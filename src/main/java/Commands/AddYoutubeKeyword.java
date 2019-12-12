@@ -19,7 +19,7 @@ public class AddYoutubeKeyword extends Command {
         try {
             String rawMessage = message.getContentRaw();
             String[] split = rawMessage.split(" ");
-            name = split[1];
+            name = split[1].toLowerCase();
             link = split[2];
         }catch (Exception e){
             String toSend = "invalid parameters on command try ,help for help";
