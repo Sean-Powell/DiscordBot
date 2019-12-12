@@ -102,6 +102,7 @@ public class RacismDetection {
         return message.contains("nigg") || message.contains("nlgg") || message.contains("n1gg");
     }
 
+
     private void increaseCount(Message message) {
         User user = message.getAuthor();
         String userID = user.getId();
