@@ -35,7 +35,7 @@ public class Logger {
             FileWriter fw = new FileWriter(logFile, true);
             fw.write(getTimeStamp() + "ERROR - " + message + "\n");
             fw.close();
-            notifyLogChannel("<@156120841891872768> ERROR:" + message);
+            notifyLogChannel("ERROR:" + message);
         }catch (IOException e){
             e.printStackTrace();
         }
