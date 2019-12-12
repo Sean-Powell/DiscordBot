@@ -147,7 +147,7 @@ public class OnMessageRecieved extends ListenerAdapter {
 
             while ((line = br.readLine()) != null) {
                 String[] lineSplit = line.split(",");
-                if(rawMessage.contains(lineSplit[0])){
+                if(rawMessage.toLowerCase().contains(lineSplit[0])){
                     if(onGuildVoiceEvents.checkFile(message.getAuthor().getId())){
                         logger.createLog("user has been in channel for required time");
                         playLink.loadAndPlay(message.getTextChannel(), message.getAuthor(), lineSplit[1]);
