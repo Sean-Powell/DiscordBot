@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class OnMessageRecieved extends ListenerAdapter {
     private ArrayList<Command> commands = new ArrayList<>();
@@ -84,6 +85,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new BanFromNameChanges(logger, "nameban", " @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked", true));
         commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
         commands.add(new ListRacism(logger, "nranks", " - Lists a counter of how many times each user has said the n word", false));
+        commands.add(new SetRateLimit(logger, "ratelimit", "- Sets the limit on the number of commands that can be used in a minute, default is 3", true));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){
@@ -98,10 +100,30 @@ public class OnMessageRecieved extends ListenerAdapter {
             String[] messageSplit = rawMessage.split(" ");
             checkCommands(messageSplit[0], message);
         }catch (Exception e){
+            e.printStackTrace();
             logger.createErrorLog("encountered in the commands check " + e.getMessage());
         }
 
         addMessageContainmentChecks(message, event);
+    }
+
+    private boolean checkIfBotSentMsg(User author){
+        return author.getId().equals(bot.getId());
+    }
+
+
+    private void checkCommands(String keyword, Message message){
+        for(Command command: commands){
+            if(command.getKeyword().equals(keyword) && (!command.getAdminProtected() || admins.contains(message.getAuthor().getId()))){
+                if(checkCmdHistory(message) || admins.contains(message.getAuthor().getId())) {
+                    command.function(message);
+                }else{
+                    String toSend = "You have issued too many commands recently please wait...";
+                    RestAction action = message.getTextChannel().sendMessage(toSend);
+                    action.complete();
+                }
+            }
+        }
     }
 
     private void addMessageContainmentChecks(Message message, MessageReceivedEvent event){
@@ -112,6 +134,16 @@ public class OnMessageRecieved extends ListenerAdapter {
         checkForYTKeyword(message);
         checkForThanks(message);
     }
+
+    private void checkForBannedPhrase(Message message){
+        if(bannedPhrases.checkString(message)){
+            RestAction action = message.delete();
+            message.getChannel().sendMessage("Hey <@" + message.getAuthor().getId() + "> that message contained a banned phrase sorry").queue();
+            logger.createLog("Deleted message for containing banned phrase " + message);
+            action.complete();
+        }
+    }
+
 
     private void checkForDeepFry(Message message, MessageReceivedEvent event){
         String rawMessage = message.getContentRaw();
@@ -134,6 +166,28 @@ public class OnMessageRecieved extends ListenerAdapter {
                 message.getTextChannel().sendMessage(messageToSend).queue();
                 result.submit();
             }
+        }
+    }
+
+    private void checkForAlexGif(Message message){
+        if(message.getContentRaw().contains("https://tenor.com/view/giant-giantess-tiny-small-vore-gif-13251272")) {
+            Member gary = getMember("gary");
+            Member alex = getMember("alex");
+            if (alex == null) {
+                String messageToSend = "alex has not been added to the member list";
+                message.getTextChannel().sendMessage(messageToSend).queue();
+            }
+
+            if (gary == null) {
+                String messageToSend = "gary has not been added to the member list";
+                message.getTextChannel().sendMessage(messageToSend).queue();
+            }
+
+            if (gary != null && alex != null) {
+                String messageToSend = "<@" + gary.getId() + ">, <@" + alex.getId() + "> is the kid";
+                message.getTextChannel().sendMessage(messageToSend).queue();
+            }
+            logger.createLog("alex's gif was found");
         }
     }
 
@@ -165,49 +219,6 @@ public class OnMessageRecieved extends ListenerAdapter {
         }
     }
 
-    private void checkForBannedPhrase(Message message){
-        if(bannedPhrases.checkString(message)){
-            RestAction action = message.delete();
-            message.getChannel().sendMessage("Hey <@" + message.getAuthor().getId() + "> that message contained a banned phrase sorry").queue();
-            logger.createLog("Deleted message for containing banned phrase " + message);
-            action.complete();
-        }
-    }
-
-    private void checkCommands(String keyword, Message message){
-        for(Command command: commands){
-            if((command.getKeyword().equals(keyword) && !command.getAdminProtected()) || (command.getKeyword().equals(keyword) && admins.contains(message.getAuthor().getId()))){
-                command.function(message);
-            }
-        }
-    }
-
-    private void checkForAlexGif(Message message){
-        if(message.getContentRaw().contains("https://tenor.com/view/giant-giantess-tiny-small-vore-gif-13251272")) {
-            Member gary = getMember("gary");
-            Member alex = getMember("alex");
-            if (alex == null) {
-                String messageToSend = "alex has not been added to the member list";
-                message.getTextChannel().sendMessage(messageToSend).queue();
-            }
-
-            if (gary == null) {
-                String messageToSend = "gary has not been added to the member list";
-                message.getTextChannel().sendMessage(messageToSend).queue();
-            }
-
-            if (gary != null && alex != null) {
-                String messageToSend = "<@" + gary.getId() + ">, <@" + alex.getId() + "> is the kid";
-                message.getTextChannel().sendMessage(messageToSend).queue();
-            }
-            logger.createLog("alex's gif was found");
-        }
-    }
-
-    private boolean checkIfBotSentMsg(User author){
-        return author.getId().equals(bot.getId());
-    }
-
     private void checkForThanks(Message message){
         String botAt = "<@485897239521132564>";
         String rawMessage = message.getContentRaw();
@@ -224,5 +235,83 @@ public class OnMessageRecieved extends ListenerAdapter {
             }
         }
         return null;
+    }
+
+    private boolean checkCmdHistory(Message message){
+        long currentTime = System.currentTimeMillis();
+        boolean valid = false;
+        boolean found = false;
+        int rateLimit;
+        try{
+            File file = new File("TextFiles/Commands/ratelimit.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            String line = br.readLine();
+            rateLimit = Integer.parseInt(line);
+            br.close();
+            fr.close();
+        }catch (Exception e){
+            rateLimit = 3;
+            logger.createErrorLog("reading the rate limit, defaulting to 3");
+        }
+
+        try{
+            File file = new File("TextFiles/Commands/commandHistory.txt");
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+
+            ArrayList<String> lines = new ArrayList<>();
+            String line;
+            StringBuilder newLine = new StringBuilder();
+            while((line = br.readLine()) != null){
+                String[] split = line.split(",");
+                if(split[0].equals(message.getAuthor().getId())){
+                    found = true;
+                    newLine.append(split[0]);
+                    for(int i = 1; i < rateLimit; i++){
+                        long commandTime = Long.parseLong(split[i]);
+                        if(currentTime - commandTime > 60000){
+                            newLine.append(",");
+                            newLine.append(System.currentTimeMillis());
+                            for(int j = i; j < rateLimit - i + 1; j++){
+                                newLine.append(",");
+                                newLine.append(split[j]);
+                            }
+                            i = line.length();
+                            valid = true;
+                        }else{
+                            newLine.append(",");
+                            newLine.append(split[i]);
+                        }
+                    }
+                    lines.add(newLine.toString());
+                }else{
+                    lines.add(line);
+                }
+            }
+
+            if(!found){
+                StringBuilder newUser = new StringBuilder(Objects.requireNonNull(message.getMember()).getId() + "," + System.currentTimeMillis());
+                for(int i = 0; i < rateLimit - 1; i++){
+                    newUser.append(",0");
+                }
+                lines.add(newUser.toString());
+                valid = true;
+            }
+            br.close();
+            fr.close();
+
+            FileWriter fw = new FileWriter(file, false);
+            for(String s: lines){
+                fw.write(s + "\n");
+            }
+            fw.close();
+
+        }catch(IOException e){
+            logger.createErrorLog("Checking the command history of a user " + e.getMessage());
+            valid = true;
+        }
+
+         return valid;
     }
 }
