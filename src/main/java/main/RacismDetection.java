@@ -1,6 +1,6 @@
 package main;
 
-import Logging.Logger;
+import logging.Logger;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -28,7 +28,7 @@ public class RacismDetection {
     public void checkForNWord(Message message) {
         String rawMessage = message.getContentRaw();
         String id = message.getAuthor().getId();
-        String filePath = "TextFiles/Commands/RacistMsgHistory/" + id + ".txt";
+        String filePath = "TextFiles/commands/RacistMsgHistory/" + id + ".txt";
 
         if (containsWord(rawMessage)) {
             if(message.getMember().getUser().getId().equals("252832922564820992")){
@@ -45,7 +45,7 @@ public class RacismDetection {
         }
 
         try {
-            FileReader fr = new FileReader("TextFiles/Commands/racist.txt");
+            FileReader fr = new FileReader("TextFiles/commands/racist.txt");
             BufferedReader br = new BufferedReader(fr);
             String line;
             while ((line = br.readLine()) != null) {
@@ -82,7 +82,7 @@ public class RacismDetection {
                             action.complete();
                         }
 
-                        fw = new FileWriter("TextFiles/Commands/RacistMsgHistory/" + id + ".txt", false);
+                        fw = new FileWriter("TextFiles/commands/RacistMsgHistory/" + id + ".txt", false);
                         fw.write("");
                         fw.close();
                         increaseCount(message);
@@ -106,7 +106,7 @@ public class RacismDetection {
     private void increaseCount(Message message) {
         User user = message.getAuthor();
         String userID = user.getId();
-        File file = new File("TextFiles/Commands/NWordCount.txt");
+        File file = new File("TextFiles/commands/NWordCount.txt");
         try{
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);

@@ -1,7 +1,7 @@
-import Listeners.*;
-import Logging.Logger;
+import listeners.*;
+import logging.Logger;
 
-import YoutubeIntergration.PlayLink;
+import youtube_intergration.PlayLink;
 
 
 import main.Member;
@@ -9,7 +9,6 @@ import main.SendMessage;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -19,7 +18,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class DiscordBot extends ListenerAdapter {

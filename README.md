@@ -8,7 +8,7 @@ A simple discord bot that does some mild moderations such as keeping track of pa
 
 Also has the ability to create links between words and youtube videos then whenever that word is typed the link is played in the channel that user is in. This is provided that the user has been in the channel for the required ammount of time. By default this is 5 seconds, this is to stop people from joining a channel and using a command to annoy the users in that channel.
 
-## Commands:
+## commands:
 
 * ,ban 'phrase' - bans a phrase from being used
 * ,cleanse 'text' - clears all occurrences of the text in the channel in the last 'limit' messages 
