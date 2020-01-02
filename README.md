@@ -28,6 +28,7 @@ Also has the ability to create links between words and youtube videos then whene
 * ,nameban @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked
 * ,nameunban @user - removes the name restrictions on the user
 * ,nranks - lists the users and the amount of times that user has sent the "n word" in the past
+* ,ratelimit - Sets the limit on the number of commands that can be used in a minute, default is 3
 
 ## Made with:
 
