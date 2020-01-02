@@ -62,6 +62,11 @@ public class RacismDetection {
                     }
                     StringBuilder full = new StringBuilder();
                     fw = new FileWriter(filePath, false);
+
+                    if(queue.size() > msgHistoryToKeep){
+                        queue.remove();
+                    }
+
                     for (int i = 0; i < msgHistoryToKeep; i++) {
                         if (queue.size() > 0) {
                             line = queue.remove();
