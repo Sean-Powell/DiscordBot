@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.*;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -133,6 +134,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         checkForAlexGif(message);
         checkForYTKeyword(message);
         checkForThanks(message);
+        checkForReddit(message);
     }
 
     private void checkForBannedPhrase(Message message){
@@ -225,6 +227,24 @@ public class OnMessageRecieved extends ListenerAdapter {
         if(rawMessage.contains(botAt) && (rawMessage.toLowerCase().contains("thanks") || rawMessage.toLowerCase().contains("thank"))){
             RestAction action = message.getTextChannel().sendMessage("You're welcome");
             action.complete();
+        }
+    }
+
+    private void checkForReddit(Message message){
+        String rawMessage = message.getContentRaw();
+        Normalizer.normalize(rawMessage, Normalizer.Form.NFD);
+        rawMessage = rawMessage.toLowerCase();
+        String[] split = rawMessage.split(" ");
+        for(String s: split){
+            if(s.equals("reddit")){
+                String toSend = "Instagram normie am i right fellow redditors? Please validate my circlejerking. Also please don’t use emojis around me please. I raided Area 51 with Keanu Reeves," +
+                                " Ricardo milos and bob ross. And danny devito. r/subsifellfor Elon musk is my boyfriend. Also sub to pewdiepie. Whaaaaaaaaaaat? You haven’t played Minecraft?" +
+                                " Ew fortnite virgin. R/unexpectedthanos r/foundthemobileuser r/foundthelightmodeuser. I’m so sorry I had to downvote to 69, kind stranger. God damn it," +
+                                " take my damn updoot. r/angryupdoot. Karen took the kids! My? You mean OUR? r/unexpectedcommunism r/twentycharacterlimit r/thirdsub r/fuckthirdsub." +
+                                " r/expected for balance r/unexpectedthanos";
+                RestAction action = message.getChannel().sendMessage(toSend);
+                action.complete();
+            }
         }
     }
 
