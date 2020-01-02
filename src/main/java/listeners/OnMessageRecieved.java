@@ -236,7 +236,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         rawMessage = rawMessage.toLowerCase();
         String[] split = rawMessage.split(" ");
         for(String s: split){
-            if(s.equals("reddit")){
+            if("reddit".equals(s) || "instagram".equals(s)){
                 String toSend = "Instagram normie am i right fellow redditors? Please validate my circlejerking. Also please don’t use emojis around me please. I raided Area 51 with Keanu Reeves," +
                                 " Ricardo milos and bob ross. And danny devito. r/subsifellfor Elon musk is my boyfriend. Also sub to pewdiepie. Whaaaaaaaaaaat? You haven’t played Minecraft?" +
                                 " Ew fortnite virgin. R/unexpectedthanos r/foundthemobileuser r/foundthelightmodeuser. I’m so sorry I had to downvote to 69, kind stranger. God damn it," +
