@@ -4,9 +4,11 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1773c4a298ac4dc082b5ff798887868d)](https://www.codacy.com/manual/Sean-Powell/DiscordBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sean-Powell/DiscordBot&amp;utm_campaign=Badge_Grade)
 
 # A Discord Bot
-A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even in a vertical manner. 
+A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even if sent in a vertical manner over multiple messages. 
 
 Also has the ability to create links between words and youtube videos then whenever that word is typed the link is played in the channel that user is in. This is provided that the user has been in the channel for the required ammount of time. By default this is 5 seconds, this is to stop people from joining a channel and using a command to annoy the users in that channel.
+
+Has a watchlist to notify the server when a select group of twitch streams goes live
 
 ## commands:
 
@@ -29,10 +31,13 @@ Also has the ability to create links between words and youtube videos then whene
 * ,nameunban @user - removes the name restrictions on the user
 * ,nranks - lists the users and the amount of times that user has sent the "n word" in the past
 * ,ratelimit - Sets the limit on the number of commands that can be used in a minute, default is 3
+* ,streamadd - <twitch_name> <notification_message> - Adds a twitch stream to the watchlist and will notify when the server goes live with the custom message
+* ,streamremove - <twitch_name> - Removes the twitch stream from the watchlist
 
 ## Made with:
 
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [LavaPlayer](https://github.com/sedmelluq/lavaplayer) - A Java audio library
 * [JDA](https://github.com/DV8FromTheWorld/JDA) - A Java wrapper for Discord
+* [JSON-Java](https://github.com/stleary/JSON-java) - A JSON library for Java
 

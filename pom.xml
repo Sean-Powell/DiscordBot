@@ -26,6 +26,12 @@
             <version>4.0.0_50</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+        </dependency>
+
         <!--        <dependency>-->
         <!--            <groupId>org.deeplearning4j</groupId>-->
         <!--            <artifactId>deeplearning4j-core</artifactId>-->
@@ -77,10 +83,18 @@
             <artifactId>sphinx4-core</artifactId>
             <version>5prealpha-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
         </dependency>
 
     </dependencies>

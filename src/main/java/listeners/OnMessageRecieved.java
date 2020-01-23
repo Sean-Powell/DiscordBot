@@ -1,5 +1,6 @@
 package listeners;
 
+import Twitch_Intergration.ChannelChecker;
 import commands.*;
 import logging.Logger;
 import youtube_intergration.PlayLink;
@@ -33,12 +34,14 @@ public class OnMessageRecieved extends ListenerAdapter {
     private CleanseChannel cleanseChannel;
     private PlayLink playLink;
     private RacismDetection racismDetection;
+    private ChannelChecker channelChecker;
 
-    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents) throws Exception{
+    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker) throws Exception{
         this.playLink = link;
         this.logger = logger;
         this.admins = admins;
         this.members = members;
+        this.channelChecker = channelChecker;
         this.racismDetection = new RacismDetection(logger);
         this.onGuildVoiceEvents = onGuildVoiceEvents;
 
@@ -87,6 +90,8 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
         commands.add(new ListRacism(logger, "nranks", " - Lists a counter of how many times each user has said the n word", false));
         commands.add(new SetRateLimit(logger, "ratelimit", "- Sets the limit on the number of commands that can be used in a minute, default is 3", true));
+        commands.add(new TwitchWatchListAdd(logger, "streamadd", "Twitch username, custom message - Adds a stream to the bots stream notification watchlist, and a custom message to display", channelChecker, true));
+        commands.add(new TwitchWatchListRemove(logger, "streamremove", " - Removes a stream from the bot stream notification", channelChecker,  true));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){

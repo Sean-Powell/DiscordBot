@@ -1,8 +1,10 @@
+import Twitch_Intergration.ChannelListener;
+import Twitch_Intergration.TwitchWatchListenerObject;
 import listeners.*;
 import logging.Logger;
 
 import youtube_intergration.PlayLink;
-
+import Twitch_Intergration.ChannelChecker;
 
 import main.Member;
 import main.SendMessage;
@@ -17,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -25,7 +28,11 @@ public class DiscordBot extends ListenerAdapter {
     private static BufferedReader configBR;
     private static File membersFile = new File("TextFiles/members.txt");
     private static Logger logger = new Logger("TextFiles/Log.txt");
+
     private static PlayLink link;
+    private static ChannelChecker channelChecker;
+    private static ChannelListener channelListener;
+
     private static SendMessage sm;
 
     private static JDA jda;
@@ -48,12 +55,17 @@ public class DiscordBot extends ListenerAdapter {
         setupSendMessage();
         setupLogger();
         setupYoutubeIntergration();
+        setupTwitchIntergration();
         addListeners();
         logger.createLog("Starting up...");
     }
 
     private static void setupYoutubeIntergration() {
          link = new PlayLink(logger);
+    }
+
+    private static void setupTwitchIntergration() {
+        channelChecker = new ChannelChecker(logger, getClientID());
     }
 
     private static void setupConfig(){
@@ -76,6 +88,8 @@ public class DiscordBot extends ListenerAdapter {
     private static String getToken(){
         return getNextConfigLine();
     }
+
+    private static String getClientID() { return getNextConfigLine(); }
 
     private static void getMembers(){
         try{
@@ -131,11 +145,12 @@ public class DiscordBot extends ListenerAdapter {
         try {
             onGuildVoiceEvents = new OnGuildVoiceEvents(logger);
             jda.addEventListener(new OnUsernameUpdate(logger, sm, members));
-            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents));
+            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents, channelChecker));
             jda.addEventListener(new OnMessageUpdate(logger));
             jda.addEventListener(new GuildMemberLeave(logger));
             jda.addEventListener(new GuildMemberJoin(logger));
             jda.addEventListener(onGuildVoiceEvents);
+            channelListener = new ChannelListener(channelChecker, jda.getTextChannelById(getToken()), logger);
         }catch (Exception e){
             logger.createErrorLog("unknown exception " + e.getMessage());
         }
