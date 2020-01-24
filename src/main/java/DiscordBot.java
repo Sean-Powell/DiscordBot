@@ -46,6 +46,11 @@ public class DiscordBot extends ListenerAdapter {
 
 
     public static void main(String[] args) {
+        System.setProperty("java.net.useSystemProxies", "true");
+
+        System.setProperty("https.proxyHost","");
+        System.setProperty("https.proxyPort","");
+
         setupConfig();
         token = getToken();
         getMembers();
@@ -152,6 +157,7 @@ public class DiscordBot extends ListenerAdapter {
             jda.addEventListener(onGuildVoiceEvents);
             channelListener = new ChannelListener(channelChecker, jda.getTextChannelById(getToken()), logger);
         }catch (Exception e){
+            e.printStackTrace();
             logger.createErrorLog("unknown exception " + e.getMessage());
         }
     }

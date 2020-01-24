@@ -89,8 +89,8 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new BanFromNameChanges(logger, "nameban", " @user - makes it so that all the users name changes are tracked and if a duplicate is found they are kicked", true));
         commands.add(new UnbanFromNameChanges(logger, "nameunban", " @user - removes the name restrictions on the user", true));
         commands.add(new ListRacism(logger, "nranks", " - Lists a counter of how many times each user has said the n word", false));
-        commands.add(new SetRateLimit(logger, "ratelimit", "- Sets the limit on the number of commands that can be used in a minute, default is 3", true));
-        commands.add(new TwitchWatchListAdd(logger, "streamadd", "Twitch username, custom message - Adds a stream to the bots stream notification watchlist, and a custom message to display", channelChecker, true));
+        commands.add(new SetRateLimit(logger, "ratelimit", " - Sets the limit on the number of commands that can be used in a minute, default is 3", true));
+        commands.add(new TwitchWatchListAdd(logger, "streamadd", " - 'Twitch username' 'custom message' - Adds a stream to the bots stream notification watchlist, and a custom message to display", channelChecker, true));
         commands.add(new TwitchWatchListRemove(logger, "streamremove", " - Removes a stream from the bot stream notification", channelChecker,  true));
     }
 

@@ -4,7 +4,7 @@ public class TwitchWatchListenerObject {
     private String id;
     private String msg;
 
-    public TwitchWatchListenerObject(String id, String msg){
+    TwitchWatchListenerObject(String id, String msg){
         this.id = id;
         this.msg = msg;
     }
@@ -13,7 +13,7 @@ public class TwitchWatchListenerObject {
         return id;
     }
 
-    public String getMsg() {
+    String getMsg() {
         return msg;
     }
 }

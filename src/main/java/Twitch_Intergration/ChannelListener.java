@@ -30,12 +30,18 @@ public class ChannelListener implements Runnable {
                ArrayList<ArrayList<String>> result = channelChecker.CheckChannels(twitchWatchListObjects);
                for(int i = 0; i < result.size(); i++){
                    ArrayList<String> list = result.get(i);
-                   if(checkTimes(twitchWatchListObjects.get(i).getId()) && checkStreamID(list.get(4))){
-                       String message = "@here " + list.get(1) + " has started streaming " + list.get(0) +  " at " + list.get(3) + " " + twitchWatchListObjects.get(i).getMsg();
+                   if(checkStreamID(list.get(4))){
+                       TwitchWatchListenerObject obj = new TwitchWatchListenerObject("", "");
+                       for(TwitchWatchListenerObject twlo : twitchWatchListObjects){
+                           if(twlo.getId().equals(list.get(5))){
+                               obj = twlo;
+                           }
+                       }
+                       String message = "@here " + list.get(1) + " has started streaming " + list.get(0) +  " at " + list.get(3) + " " + obj.getMsg();
                        RestAction action = notificationChannel.sendMessage(message);
                        action.complete();
 
-                       timeoutObjects.add(new TimeoutObject(twitchWatchListObjects.get(i).getId(), System.currentTimeMillis()));
+                       timeoutObjects.add(new TimeoutObject(twitchWatchListObjects.get(i).getId()));
                    }
                }
            }
@@ -68,22 +74,6 @@ public class ChannelListener implements Runnable {
         return null;
     }
 
-    private boolean checkTimes(String id){
-        for(TimeoutObject obj : timeoutObjects){
-            if(obj.getId().equals(id)){
-                boolean returned = obj.checkTime();
-                if(returned){
-                    timeoutObjects.remove(obj);
-                    return true;
-                }else{
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     private boolean checkStreamID(String id){
         File file = new File("TextFiles/commands/TwitchStreamHistory.txt");
         try{
@@ -113,19 +103,12 @@ public class ChannelListener implements Runnable {
 
 class TimeoutObject{
     private String id;
-    private Long time;
 
-    TimeoutObject(String id, Long time){
+    TimeoutObject(String id){
         this.id = id;
-        this.time = time;
     }
 
     String getId() {
         return id;
-    }
-
-    boolean checkTime(){
-        int timout_length = 300000;
-        return (System.currentTimeMillis() - time) > timout_length;
     }
 }
