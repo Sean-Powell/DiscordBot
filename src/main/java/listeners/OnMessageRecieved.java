@@ -92,6 +92,8 @@ public class OnMessageRecieved extends ListenerAdapter {
         commands.add(new SetRateLimit(logger, "ratelimit", " - Sets the limit on the number of commands that can be used in a minute, default is 3", true));
         commands.add(new TwitchWatchListAdd(logger, "streamadd", " - 'Twitch username' 'custom message' - Adds a stream to the bots stream notification watchlist, and a custom message to display", channelChecker, true));
         commands.add(new TwitchWatchListRemove(logger, "streamremove", " - Removes a stream from the bot stream notification", channelChecker,  true));
+        commands.add(new TwitchNotificationAdd(logger, "streamreg", " - Adds a role to the user so they get notified about streams", false));
+        commands.add(new TwitchNotificationRemove(logger, "streamunreg", " - Removes the role from the user so they no longer get notified about streams", false));
     }
 
     public void onMessageReceived(MessageReceivedEvent event){

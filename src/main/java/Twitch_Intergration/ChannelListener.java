@@ -14,6 +14,7 @@ public class ChannelListener implements Runnable {
     //talking id 311227229772316672
 
     private ArrayList<TimeoutObject> timeoutObjects = new ArrayList<>();
+    String roleID = "671472280362024970";
 
     public ChannelListener(ChannelChecker channelChecker, TextChannel channel,  Logger logger){
         this.logger = logger;
@@ -28,6 +29,7 @@ public class ChannelListener implements Runnable {
            ArrayList<TwitchWatchListenerObject> twitchWatchListObjects =  ReadWatchList();
            if(twitchWatchListObjects != null) {
                ArrayList<ArrayList<String>> result = channelChecker.CheckChannels(twitchWatchListObjects);
+               System.out.println(result);
                for(int i = 0; i < result.size(); i++){
                    ArrayList<String> list = result.get(i);
                    if(checkStreamID(list.get(4))){
@@ -37,7 +39,7 @@ public class ChannelListener implements Runnable {
                                obj = twlo;
                            }
                        }
-                       String message = "@here " + list.get(1) + " has started streaming " + list.get(0) +  " at " + list.get(3) + " " + obj.getMsg();
+                       String message = "<@&" + roleID + "> " + list.get(1) + " has started streaming " + list.get(0) +  " at " + list.get(3) + " " + obj.getMsg();
                        RestAction action = notificationChannel.sendMessage(message);
                        action.complete();
 
