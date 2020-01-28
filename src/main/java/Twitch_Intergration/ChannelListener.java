@@ -14,7 +14,7 @@ public class ChannelListener implements Runnable {
     //talking id 311227229772316672
 
     private ArrayList<TimeoutObject> timeoutObjects = new ArrayList<>();
-    String roleID = "671472280362024970";
+    private String roleID = "671472280362024970";
 
     public ChannelListener(ChannelChecker channelChecker, TextChannel channel,  Logger logger){
         this.logger = logger;
@@ -39,7 +39,13 @@ public class ChannelListener implements Runnable {
                                obj = twlo;
                            }
                        }
-                       String message = "<@&" + roleID + "> " + list.get(1) + " has started streaming " + list.get(0) +  " at " + list.get(3) + " " + obj.getMsg();
+                       String role;
+                       if(list.get(6).equals("League of Legends")){
+                           role = "<@&650677447620034609>";
+                       }else {
+                           role  = "<@&" + roleID + ">";
+                       }
+                       String message = role + " " + list.get(1) + " has started streaming " + list.get(0) + " at " + list.get(3) + " " + obj.getMsg();
                        RestAction action = notificationChannel.sendMessage(message);
                        action.complete();
 

@@ -68,6 +68,7 @@ public class ChannelChecker {
                 String display_name = channelArray.getString("display_name");
                 String url_data = channelArray.getString("url");
                 String channel_id = "" + channelArray.getInt("_id");
+                String game = channelArray.getString("game");
 
                 ArrayList<String> info = new ArrayList<>();
                 info.add(status);
@@ -76,6 +77,7 @@ public class ChannelChecker {
                 info.add(url_data);
                 info.add(stream_id);
                 info.add(channel_id);
+                info.add(game);
                 channelInfoList.add(info);
             }
             return channelInfoList;
