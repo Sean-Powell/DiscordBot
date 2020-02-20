@@ -121,10 +121,12 @@ public class OnMessageRecieved extends ListenerAdapter {
 
 
     private void checkCommands(String keyword, Message message){
+        boolean commandUsed = false;
         for(Command command: commands){
-            if(command.getKeyword().equals(keyword) && (!command.getAdminProtected() || admins.contains(message.getAuthor().getId()))){
+            if(command.getKeyword().equals(keyword) && (!command.getAdminProtected() || admins.contains(message.getAuthor().getId())) && !commandUsed){
                 if(checkCmdHistory(message) || admins.contains(message.getAuthor().getId())) {
                     command.function(message);
+                    commandUsed = true;
                 }else{
                     String toSend = "You have issued too many commands recently please wait...";
                     RestAction action = message.getTextChannel().sendMessage(toSend);
@@ -229,9 +231,10 @@ public class OnMessageRecieved extends ListenerAdapter {
     }
 
     private void checkForThanks(Message message){
-        String botAt = "<@485897239521132564>";
+        String botID = "485897239521132564";
+//        String botAt = "<@!485897239521132564>";
         String rawMessage = message.getContentRaw();
-        if(rawMessage.contains(botAt) && (rawMessage.toLowerCase().contains("thanks") || rawMessage.toLowerCase().contains("thank"))){
+        if((rawMessage.contains("<@!" + botID + ">") || rawMessage.contains("<@" + botID + ">")) && (rawMessage.toLowerCase().contains("thanks") || rawMessage.toLowerCase().contains("thank"))){
             RestAction action = message.getTextChannel().sendMessage("You're welcome");
             action.complete();
         }
