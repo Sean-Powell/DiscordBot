@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 
 public class DiscordBot extends ListenerAdapter {
@@ -156,7 +158,11 @@ public class DiscordBot extends ListenerAdapter {
             channelListener = new ChannelListener(channelChecker, jda.getTextChannelById(getToken()), logger);
         }catch (Exception e){
             e.printStackTrace();
-            logger.createErrorLog("unknown exception " + e.getMessage());
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String stackTraceString = sw.toString();
+            logger.createErrorLog("unknown exception " + e.getMessage() + ", " + stackTraceString);
         }
     }
 }
