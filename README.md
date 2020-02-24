@@ -1,7 +1,6 @@
 [license]: https://github.com/Sean-Powell/DiscordBot/blob/master/LICENSE
 [license-shield]: https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg
 [ ![license-shield][] ][license]
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1773c4a298ac4dc082b5ff798887868d)](https://www.codacy.com/manual/Sean-Powell/DiscordBot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sean-Powell/DiscordBot&amp;utm_campaign=Badge_Grade)
 
 # A Discord Bot
 A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even if sent in a vertical manner over multiple messages. 
