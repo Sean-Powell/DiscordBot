@@ -57,8 +57,8 @@ public class ChannelChecker {
             //String response = openConnection(url);
            // String response = runCommand(url);
             JSONObject jsonObject = new JSONObject(response);
-            int numberOfStreams = jsonObject.getInt("_total");
             JSONArray dataArray = jsonObject.getJSONArray("streams");
+            int numberOfStreams = dataArray.length();
             for(int i = 0; i < numberOfStreams; i++){
                 JSONObject subObject = dataArray.getJSONObject(i);
                 String time = subObject.getString("created_at");
