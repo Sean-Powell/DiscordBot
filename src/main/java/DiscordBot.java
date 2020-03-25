@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import net.sourceforge.tess4j.*;
+
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +34,7 @@ public class DiscordBot extends ListenerAdapter {
     private static PlayLink link;
     private static ChannelChecker channelChecker;
     private static ChannelListener channelListener;
+    private static ITesseract instance;
 
     private static SendMessage sm;
 
@@ -61,6 +64,7 @@ public class DiscordBot extends ListenerAdapter {
         setupLogger();
         setupYoutubeIntergration();
         setupTwitchIntergration();
+        setupOCRIntergration();
         addListeners();
         logger.createLog("Starting up...");
     }
@@ -71,6 +75,11 @@ public class DiscordBot extends ListenerAdapter {
 
     private static void setupTwitchIntergration() {
         channelChecker = new ChannelChecker(logger, getClientID());
+    }
+
+    private static void setupOCRIntergration(){
+        instance = new Tesseract();
+        instance.setDatapath("tessdata");
     }
 
     private static void setupConfig(){
@@ -150,7 +159,8 @@ public class DiscordBot extends ListenerAdapter {
         try {
             onGuildVoiceEvents = new OnGuildVoiceEvents(logger);
             jda.addEventListener(new OnUsernameUpdate(logger, sm, members));
-            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents, channelChecker));
+            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents, channelChecker, instance));
+//            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents, channelChecker));
             jda.addEventListener(new OnMessageUpdate(logger));
             jda.addEventListener(new GuildMemberLeave(logger));
             jda.addEventListener(new GuildMemberJoin(logger));

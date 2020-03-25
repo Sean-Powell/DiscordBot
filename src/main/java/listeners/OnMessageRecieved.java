@@ -3,6 +3,8 @@ package listeners;
 import Twitch_Intergration.ChannelChecker;
 import commands.*;
 import logging.Logger;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.TesseractException;
 import youtube_intergration.PlayLink;
 import main.Member;
 
@@ -17,6 +19,7 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import java.io.*;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class OnMessageRecieved extends ListenerAdapter {
@@ -35,8 +38,9 @@ public class OnMessageRecieved extends ListenerAdapter {
     private PlayLink playLink;
     private RacismDetection racismDetection;
     private ChannelChecker channelChecker;
+    private ITesseract instance;
 
-    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker) throws Exception{
+    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker, ITesseract instance) throws Exception{
         this.playLink = link;
         this.logger = logger;
         this.admins = admins;
@@ -44,7 +48,7 @@ public class OnMessageRecieved extends ListenerAdapter {
         this.channelChecker = channelChecker;
         this.racismDetection = new RacismDetection(logger);
         this.onGuildVoiceEvents = onGuildVoiceEvents;
-
+        this.instance = instance;
         bot = getMember("bot");
         if(bot == null){
             logger.createErrorLog("bots id could not be found in the members list");
@@ -103,6 +107,22 @@ public class OnMessageRecieved extends ListenerAdapter {
         if(checkIfBotSentMsg(author)){
             return;
         }
+        List<Message.Attachment> attachmentList = message.getAttachments();
+        for(Message.Attachment attachment: attachmentList){
+            if(attachment.isImage()){
+                try{
+                    attachment.downloadToFile(new File("tempFile.png"));
+                    String result = instance.doOCR(new File("tempFile.png"));
+                    logger.createLog("Found " + result + " in image");
+                    racismDetection.checkForNWord(message, result);
+                }catch(TesseractException te){
+                    te.printStackTrace();
+                    logger.createErrorLog(te.getMessage());
+                }catch(Exception e){
+                    logger.createErrorLog("A unspecified exception occurred while reading the image");
+                }
+            }
+        }
 
         try{
             String[] messageSplit = rawMessage.split(" ");
@@ -137,7 +157,7 @@ public class OnMessageRecieved extends ListenerAdapter {
     }
 
     private void addMessageContainmentChecks(Message message, MessageReceivedEvent event){
-        racismDetection.checkForNWord(message);
+        racismDetection.checkForNWord(message, message.getContentRaw());
         checkForBannedPhrase(message);
         checkForDeepFry(message, event);
         checkForAlexGif(message);

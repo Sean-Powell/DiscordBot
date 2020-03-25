@@ -51,9 +51,11 @@ public class ChannelChecker {
             s = s.replaceAll("//r|//n", "");
             ids.append(",").append(s);
         }
+        String response = "";
         try{
             URL url = new URL((ids.toString()));
-            String response = openGETConnection(url);
+            response = openGETConnection(url);
+//            logger.createLog("Response: " + response);
             //String response = openConnection(url);
            // String response = runCommand(url);
             JSONObject jsonObject = new JSONObject(response);
@@ -82,7 +84,11 @@ public class ChannelChecker {
             }
             return channelInfoList;
         } catch (Exception e) {
-            e.printStackTrace();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String msg = pw.toString();
+            logger.createErrorLog(e.getMessage() + ", " + msg + ", response: " + response);
         }
         return null;
     }

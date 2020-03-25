@@ -25,19 +25,18 @@ public class RacismDetection {
         this.logger = logger;
     }
 
-    public void checkForNWord(Message message) {
-        String rawMessage = message.getContentRaw();
+    public void checkForNWord(Message message, String text) {
         String id = message.getAuthor().getId();
         String filePath = "TextFiles/commands/RacistMsgHistory/" + id + ".txt";
 
-        if (containsWord(rawMessage)) {
+        if (containsWord(text)) {
             if(message.getMember().getUser().getId().equals("252832922564820992")){
                 RestAction action = message.delete();
                 action.complete();
             }else {
                 RestAction action = message.delete();
                 message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
-                logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word");
+                logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word msg was " + text);
                 action.complete();
                 increaseCount(message);
             }
@@ -105,7 +104,7 @@ public class RacismDetection {
         message = Normalizer.normalize(message, Normalizer.Form.NFD);
         message = message.replaceAll("[^A-za-z1]", "").toLowerCase();
         return message.contains("nigg") || message.contains("nlgg") || message.contains("n1gg") ||
-                message.contains("n|gg") || message.contains("N/gger") || message.contains("N\\gger");
+                message.contains("n|gg") || message.contains("n/gger") || message.contains("n\\gger");
     }
 
 

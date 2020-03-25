@@ -41,3 +41,7 @@ public class ListRacism extends Command {
         action.complete();
     }
 }
+
+class Randle{
+
+}

@@ -14,6 +14,6 @@ public class OnMessageUpdate extends ListenerAdapter {
     }
 
     public void onMessageUpdate(@Nonnull MessageUpdateEvent event) {
-        racismDetection.checkForNWord(event.getMessage());
+        racismDetection.checkForNWord(event.getMessage() , event.getMessage().getContentRaw());
     }
 }

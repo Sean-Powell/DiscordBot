@@ -28,8 +28,24 @@ public class ChannelListener implements Runnable {
         while(true){
            ArrayList<TwitchWatchListenerObject> twitchWatchListObjects =  ReadWatchList();
            if(twitchWatchListObjects != null) {
-               ArrayList<ArrayList<String>> result = channelChecker.CheckChannels(twitchWatchListObjects);
-               System.out.println(result);
+               ArrayList<ArrayList<String>> result;
+               int counter = 0;
+               do {
+                   result = channelChecker.CheckChannels(twitchWatchListObjects);
+                   if(result == null){
+                       try {
+                           Thread.sleep(50000);
+                           counter++;
+                           if(counter == 20){
+                               Thread.sleep(120000);
+                           }
+                       }catch (InterruptedException ie){
+                           logger.createLog("Unable to pause thread");
+                           logger.createErrorLog(ie.getMessage());
+                       }
+                   }
+               }while (result == null);
+
                for(int i = 0; i < result.size(); i++){
                    ArrayList<String> list = result.get(i);
                    if(checkStreamID(list.get(4))){

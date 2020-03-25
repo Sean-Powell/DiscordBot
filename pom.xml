@@ -26,11 +26,20 @@
             <version>4.0.0_50</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160810</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
+        <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+
 
         <!--        <dependency>-->
         <!--            <groupId>org.deeplearning4j</groupId>-->
@@ -90,13 +99,6 @@
             <version>2.5</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20190722</version>
-        </dependency>
-
     </dependencies>
 
 
@@ -111,6 +113,11 @@
             <id>central</id>
             <name>bintray</name>
             <url>http://jcenter.bintray.com</url>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
 
         <repository>
