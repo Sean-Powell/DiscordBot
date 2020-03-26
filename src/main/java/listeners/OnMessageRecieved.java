@@ -3,8 +3,8 @@ package listeners;
 import Twitch_Intergration.ChannelChecker;
 import commands.*;
 import logging.Logger;
+import main.OCRThread;
 import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.TesseractException;
 import youtube_intergration.PlayLink;
 import main.Member;
 
@@ -38,9 +38,8 @@ public class OnMessageRecieved extends ListenerAdapter {
     private PlayLink playLink;
     private RacismDetection racismDetection;
     private ChannelChecker channelChecker;
-    private ITesseract instance;
 
-    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker, ITesseract instance) throws Exception{
+    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker) throws Exception{
         this.playLink = link;
         this.logger = logger;
         this.admins = admins;
@@ -48,7 +47,6 @@ public class OnMessageRecieved extends ListenerAdapter {
         this.channelChecker = channelChecker;
         this.racismDetection = new RacismDetection(logger);
         this.onGuildVoiceEvents = onGuildVoiceEvents;
-        this.instance = instance;
         bot = getMember("bot");
         if(bot == null){
             logger.createErrorLog("bots id could not be found in the members list");
@@ -104,20 +102,22 @@ public class OnMessageRecieved extends ListenerAdapter {
         User author = event.getAuthor();
         Message message = event.getMessage();
         String rawMessage = message.getContentRaw();
-        if(checkIfBotSentMsg(author)){
+        if(checkIfBotSentMsg(author)) {
             return;
         }
+
+        if(addMessageContainmentChecks(message, event)){
+            return;
+        }
+
         List<Message.Attachment> attachmentList = message.getAttachments();
         for(Message.Attachment attachment: attachmentList){
             if(attachment.isImage()){
                 try{
-                    attachment.downloadToFile(new File("tempFile.png"));
-                    String result = instance.doOCR(new File("tempFile.png"));
-                    logger.createLog("Found " + result + " in image");
-                    racismDetection.checkForNWord(message, result);
-                }catch(TesseractException te){
-                    te.printStackTrace();
-                    logger.createErrorLog(te.getMessage());
+                    File file = new File(attachment.getFileName());
+                    attachment.downloadToFile(file);
+                    OCRThread ocrThread = new OCRThread(file, message, logger);
+                    ocrThread.run();
                 }catch(Exception e){
                     logger.createErrorLog("A unspecified exception occurred while reading the image");
                 }
@@ -131,8 +131,6 @@ public class OnMessageRecieved extends ListenerAdapter {
             e.printStackTrace();
             logger.createErrorLog("encountered in the commands check " + e.getMessage());
         }
-
-        addMessageContainmentChecks(message, event);
     }
 
     private boolean checkIfBotSentMsg(User author){
@@ -156,27 +154,54 @@ public class OnMessageRecieved extends ListenerAdapter {
         }
     }
 
-    private void addMessageContainmentChecks(Message message, MessageReceivedEvent event){
-        racismDetection.checkForNWord(message, message.getContentRaw());
-        checkForBannedPhrase(message);
-        checkForDeepFry(message, event);
+    private boolean addMessageContainmentChecks(Message message, MessageReceivedEvent event){
+        boolean found;
+        found = racismDetection.checkForNWord(message, message.getContentRaw());
+        if(!found) {
+            found = checkForBannedPhrase(message);
+        }
+
+        if(!found){
+            found = checkForDeepFry(message, event);
+        }
+
+        if(!found){
+            found = checkForURLComment(message);
+        }
+
         checkForAlexGif(message);
         checkForYTKeyword(message);
         checkForThanks(message);
         checkForReddit(message);
+        return found;
     }
 
-    private void checkForBannedPhrase(Message message){
+    private boolean checkForBannedPhrase(Message message){
         if(bannedPhrases.checkString(message)){
             RestAction action = message.delete();
             message.getChannel().sendMessage("Hey <@" + message.getAuthor().getId() + "> that message contained a banned phrase sorry").queue();
             logger.createLog("Deleted message for containing banned phrase " + message);
             action.complete();
+            return true;
         }
+        return false;
+    }
+
+    private boolean checkForURLComment(Message message){
+        if(message.getAuthor().getId().equals("252832922564820992")){
+            if(message.getContentRaw().toLowerCase().contains("?comment=")){
+                RestAction action = message.delete();
+                String toSend = "URL contained and irrelevant comment";
+                message.getTextChannel().sendMessage(toSend).complete();
+                action.complete();
+                return true;
+            }
+        }
+        return false;
     }
 
 
-    private void checkForDeepFry(Message message, MessageReceivedEvent event){
+    private boolean checkForDeepFry(Message message, MessageReceivedEvent event){
         String rawMessage = message.getContentRaw();
         String authorID = message.getAuthor().getId();
         if(bannedFromDF.contains(authorID)){
@@ -190,14 +215,17 @@ public class OnMessageRecieved extends ListenerAdapter {
                 logger.createLog("kicking " + message.getAuthor().getName() + " for deep frying while banned");
                 message.getTextChannel().sendMessage(messageToSend).queue();
                 result.submit();
+                return true;
             }else if(rawMessageSymbolsRemoved.contains(".df")){
                 AuditableRestAction result = event.getGuild().kick(authorID);
                 String messageToSend = "<@ " + authorID + "> nice attempt but you are still banned from deep frying";
                 logger.createLog("kicking " + message.getAuthor().getName() + " for deep frying, attempted to get around the ban");
                 message.getTextChannel().sendMessage(messageToSend).queue();
                 result.submit();
+                return true;
             }
         }
+        return false;
     }
 
     private void checkForAlexGif(Message message){
@@ -230,16 +258,19 @@ public class OnMessageRecieved extends ListenerAdapter {
             BufferedReader br = new BufferedReader(fr);
             String line;
 
-            while ((line = br.readLine()) != null) {
+            boolean keyword = false;
+            while ((line = br.readLine()) != null && !keyword) {
                 String[] lineSplit = line.split(",");
                 if(rawMessage.contains(lineSplit[0])){
                     if(onGuildVoiceEvents.checkFile(message.getAuthor().getId())){
                         logger.createLog("user has been in channel for required time");
                         playLink.loadAndPlay(message.getTextChannel(), message.getAuthor(), lineSplit[1]);
+                        keyword = true;
                     }else{
                         logger.createLog("user has not been in the channel long enough");
                         String toSend = "Sorry,  you have not been in that channel long enough\n";
                         message.getTextChannel().sendMessage(toSend).queue();
+                        keyword = true;
                     }
                 }
             }

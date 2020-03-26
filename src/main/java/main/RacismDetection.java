@@ -25,7 +25,7 @@ public class RacismDetection {
         this.logger = logger;
     }
 
-    public void checkForNWord(Message message, String text) {
+    public boolean checkForNWord(Message message, String text) {
         String id = message.getAuthor().getId();
         String filePath = "TextFiles/commands/RacistMsgHistory/" + id + ".txt";
 
@@ -40,7 +40,7 @@ public class RacismDetection {
                 action.complete();
                 increaseCount(message);
             }
-            return;
+            return true;
         }
 
         try {
@@ -90,6 +90,9 @@ public class RacismDetection {
                         fw.write("");
                         fw.close();
                         increaseCount(message);
+                        br.close();
+                        fr.close();
+                        return true;
                     }
                 }
             }
@@ -98,6 +101,7 @@ public class RacismDetection {
         } catch (IOException e) {
             logger.createErrorLog("some racist broke it " + e.getMessage());
         }
+        return false;
     }
 
     private boolean containsWord(String message) { //todo improve the detection method
