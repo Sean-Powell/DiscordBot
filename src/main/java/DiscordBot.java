@@ -2,6 +2,7 @@ import Twitch_Intergration.ChannelListener;
 import listeners.*;
 import logging.Logger;
 
+import main.RacismDetection;
 import youtube_intergration.PlayLink;
 import Twitch_Intergration.ChannelChecker;
 
@@ -34,6 +35,7 @@ public class DiscordBot extends ListenerAdapter {
     private static ChannelListener channelListener;
 
     private static SendMessage sm;
+    private static RacismDetection rm;
 
     private static JDA jda;
     private static String token;
@@ -59,6 +61,7 @@ public class DiscordBot extends ListenerAdapter {
         setupJDA();
         setupSendMessage();
         setupLogger();
+        setupRacismDetection();
         setupYoutubeIntergration();
         setupTwitchIntergration();
         addListeners();
@@ -146,11 +149,13 @@ public class DiscordBot extends ListenerAdapter {
         sm = new SendMessage(jda.getTextChannelById(getNextConfigLine()));
     }
 
+    private static void setupRacismDetection(){rm = new RacismDetection(logger);}
+
     private static void addListeners(){
         try {
             onGuildVoiceEvents = new OnGuildVoiceEvents(logger);
-            jda.addEventListener(new OnUsernameUpdate(logger, sm, members));
-            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents, channelChecker));
+            jda.addEventListener(new OnUsernameUpdate(logger, sm, members, rm));
+            jda.addEventListener(new OnMessageRecieved(logger, members, admins, link, onGuildVoiceEvents, channelChecker, rm));
             jda.addEventListener(new OnMessageUpdate(logger));
             jda.addEventListener(new GuildMemberLeave(logger));
             jda.addEventListener(new GuildMemberJoin(logger));

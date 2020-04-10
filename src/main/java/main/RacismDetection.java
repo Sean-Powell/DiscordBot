@@ -1,6 +1,7 @@
 package main;
 
 import logging.Logger;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -38,7 +39,7 @@ public class RacismDetection {
                 message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
                 logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word msg was " + text);
                 action.complete();
-                increaseCount(message);
+                increaseCount(message.getMember(), message.getGuild());
             }
             return true;
         }
@@ -89,7 +90,7 @@ public class RacismDetection {
                         fw = new FileWriter("TextFiles/commands/RacistMsgHistory/" + id + ".txt", false);
                         fw.write("");
                         fw.close();
-                        increaseCount(message);
+                        increaseCount(message.getMember(), message.getGuild());
                         br.close();
                         fr.close();
                         return true;
@@ -104,7 +105,7 @@ public class RacismDetection {
         return false;
     }
 
-    private boolean containsWord(String message) { //todo improve the detection method
+    public boolean containsWord(String message) { //todo improve the detection method
         message = Normalizer.normalize(message, Normalizer.Form.NFD);
         message = message.replaceAll("[^A-za-z1]", "").toLowerCase();
         return message.contains("nigg") || message.contains("nlgg") || message.contains("n1gg") ||
@@ -112,8 +113,12 @@ public class RacismDetection {
     }
 
 
-    private void increaseCount(Message message) {
-        User user = message.getAuthor();
+    public void increaseCount(Member member, Guild guild) {
+        if(member == null){
+            logger.createErrorLog("Member could not be found");
+            return;
+        }
+        User user = member.getUser();
         String userID = user.getId();
         File file = new File("TextFiles/commands/NWordCount.txt");
         try{
@@ -139,21 +144,17 @@ public class RacismDetection {
 
             if(count == -1){
                 count = 0;
-                RoleAction role =  message.getGuild().createRole();
+                RoleAction role = guild.createRole();
                 role = role.setName("N Word Count: " + 0);
                 Role newRole = role.complete();
                 roleID = newRole.getId();
-                Member member = message.getGuild().getMember(message.getAuthor());
-                if(member == null){
-                    logger.createErrorLog("Member could not be found " + message.getAuthor());
-                    return;
-                }
-                RestAction action = message.getGuild().addRoleToMember(member, newRole);
+
+                RestAction action = guild.addRoleToMember(member, newRole);
                 action.complete();
             }
             count++;
 
-            Role role = message.getGuild().getRoleById(roleID);
+            Role role = guild.getRoleById(roleID);
             if(role == null){
                 logger.createErrorLog("The role does not exist " + roleID);
                 return;

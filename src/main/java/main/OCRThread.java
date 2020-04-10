@@ -48,6 +48,8 @@ public class OCRThread implements Runnable {
             }else{
                 logger.createErrorLog("Could not delete file");
             }
+
+            tesseract = null;
         }
     }
 

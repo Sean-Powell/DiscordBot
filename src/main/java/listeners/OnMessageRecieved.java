@@ -39,13 +39,14 @@ public class OnMessageRecieved extends ListenerAdapter {
     private RacismDetection racismDetection;
     private ChannelChecker channelChecker;
 
-    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker) throws Exception{
+    public OnMessageRecieved(Logger logger, ArrayList<Member> members, ArrayList<String> admins, PlayLink link, OnGuildVoiceEvents onGuildVoiceEvents, ChannelChecker channelChecker,
+                             RacismDetection racismDetection) throws Exception{
         this.playLink = link;
         this.logger = logger;
         this.admins = admins;
         this.members = members;
         this.channelChecker = channelChecker;
-        this.racismDetection = new RacismDetection(logger);
+        this.racismDetection = racismDetection;
         this.onGuildVoiceEvents = onGuildVoiceEvents;
         bot = getMember("bot");
         if(bot == null){
@@ -110,19 +111,19 @@ public class OnMessageRecieved extends ListenerAdapter {
             return;
         }
 
-        List<Message.Attachment> attachmentList = message.getAttachments();
-        for(Message.Attachment attachment: attachmentList){
-            if(attachment.isImage()){
-                try{
-                    File file = new File(attachment.getFileName());
-                    attachment.downloadToFile(file);
-                    OCRThread ocrThread = new OCRThread(file, message, logger);
-                    ocrThread.run();
-                }catch(Exception e){
-                    logger.createErrorLog("A unspecified exception occurred while reading the image");
-                }
-            }
-        }
+//        List<Message.Attachment> attachmentList = message.getAttachments();
+//        for(Message.Attachment attachment: attachmentList){
+//            if(attachment.isImage()){
+//                try{
+//                    attachment.downloadToFile(attachment.getFileName());
+//                    File file = new File(attachment.getFileName());
+//                    OCRThread ocrThread = new OCRThread(file, message, logger);
+//                    ocrThread.run();
+//                }catch(Exception e){
+//                    logger.createErrorLog("A unspecified exception occurred while reading the image");
+//                }
+//            }
+//        }
 
         try{
             String[] messageSplit = rawMessage.split(" ");

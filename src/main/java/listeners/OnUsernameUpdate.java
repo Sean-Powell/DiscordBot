@@ -4,9 +4,11 @@ import file_management.FileFunctions;
 import logging.Logger;
 import main.SendMessage;
 import main.Member;
+import main.RacismDetection;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateNicknameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
 import java.io.*;
@@ -20,12 +22,14 @@ public class OnUsernameUpdate extends ListenerAdapter {
     private ArrayList<String> targets = new ArrayList<>();
     private Logger logger;
     private SendMessage sm;
+    private RacismDetection racismDetection;
 
 
-    public OnUsernameUpdate(Logger logger, SendMessage sendMessage, ArrayList<Member> members) {
+    public OnUsernameUpdate(Logger logger, SendMessage sendMessage, ArrayList<Member> members, RacismDetection rm) {
         this.logger = logger;
         this.sm = sendMessage;
         this.members = members;
+        this.racismDetection = rm;
         setupTargets();
     }
 
@@ -49,6 +53,14 @@ public class OnUsernameUpdate extends ListenerAdapter {
         User user = event.getUser();
         String id = user.getId();
         String message;
+
+        if(racismDetection.containsWord(newName)){
+            net.dv8tion.jda.api.entities.Member member = event.getMember();
+            RestAction action = member.modifyNickname(oldName);
+            action.complete();
+            racismDetection.increaseCount(event.getMember(), event.getGuild());
+            logger.createLog("Changed " + user.getName() + "s name back to " + oldName + " from " + newName);
+        }
 
         if(isTarget(id)){
             if(checkNames(id, newName)){
