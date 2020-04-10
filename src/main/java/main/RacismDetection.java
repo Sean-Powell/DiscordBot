@@ -37,7 +37,11 @@ public class RacismDetection {
             }else {
                 RestAction action = message.delete();
                 message.getChannel().sendMessage("Hey <@" + id + "> you can't say that").queue();
-                logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word msg was " + text);
+                if(text.length() >= 2000){
+                    logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " was over 2000 chars long so can't post text");
+                }else {
+                    logger.createLog("Deleting message sent by " + message.getAuthor().getName() + " containing n word msg was " + text);
+                }
                 action.complete();
                 increaseCount(message.getMember(), message.getGuild());
             }

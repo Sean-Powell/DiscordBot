@@ -12,16 +12,38 @@ import java.text.Normalizer;
 
 public class OCRThread implements Runnable {
     private File file;
+    private String filePath;
     private Message message;
     private Logger logger;
 
-    public OCRThread(File file, Message message, Logger logger){
-        this.file = file;
+    public OCRThread(String filePath, Message message, Logger logger){
+        this.filePath = filePath;
         this.message = message;
         this.logger = logger;
     }
 
     public void run(){
+        int exceptionCount = 0;
+        file = null;
+        while(exceptionCount < 10) {
+            try {
+                 file = new File(filePath);
+                 exceptionCount = 20;
+            } catch (Exception e) {
+                exceptionCount++;
+                try {
+                    Thread.sleep(1000 * exceptionCount);
+                }catch(InterruptedException ie){
+                    logger.createErrorLog("Could not pause thread");
+                }
+
+                if(exceptionCount > 10){
+                    logger.createErrorLog("Tried 10 times to open the file");
+                    return;
+                }
+            }
+        }
+
         ITesseract tesseract = new Tesseract();
         tesseract.setDatapath("tessdata");
         try{
@@ -48,8 +70,6 @@ public class OCRThread implements Runnable {
             }else{
                 logger.createErrorLog("Could not delete file");
             }
-
-            tesseract = null;
         }
     }
 
