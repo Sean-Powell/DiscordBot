@@ -4,7 +4,6 @@ import Twitch_Intergration.ChannelChecker;
 import commands.*;
 import logging.Logger;
 import main.OCRThread;
-import net.sourceforge.tess4j.ITesseract;
 import youtube_intergration.PlayLink;
 import main.Member;
 

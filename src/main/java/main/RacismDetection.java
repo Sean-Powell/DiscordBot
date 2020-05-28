@@ -117,7 +117,7 @@ public class RacismDetection {
     }
 
 
-    public void increaseCount(Member member, Guild guild) {
+    public synchronized void increaseCount(Member member, Guild guild) {
         if(member == null){
             logger.createErrorLog("Member could not be found");
             return;

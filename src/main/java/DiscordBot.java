@@ -49,7 +49,6 @@ public class DiscordBot extends ListenerAdapter {
 
     public static void main(String[] args) {
         System.setProperty("java.net.useSystemProxies", "true");
-
         System.setProperty("https.proxyHost","");
         System.setProperty("https.proxyPort","");
 

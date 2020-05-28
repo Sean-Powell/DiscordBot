@@ -19,7 +19,7 @@ public class Logger {
 
     public void setLogChannel(TextChannel channel){this.logChannel = channel;}
 
-    public void createLog(String message){
+    public synchronized void createLog(String message){
         try{
             FileWriter fw = new FileWriter(logFile, true);
             fw.write(getTimeStamp() + message + "\n");
@@ -30,7 +30,7 @@ public class Logger {
         }
     }
 
-    public void createErrorLog(String message){
+    public synchronized void createErrorLog(String message){
         try{
             FileWriter fw = new FileWriter(logFile, true);
             fw.write(getTimeStamp() + "ERROR - " + message + "\n");
@@ -41,7 +41,7 @@ public class Logger {
         }
     }
 
-    private void notifyLogChannel(String message){
+    private synchronized void notifyLogChannel(String message){
         if(logChannel != null){
             logChannel.sendMessage(message).queue();
         }else{

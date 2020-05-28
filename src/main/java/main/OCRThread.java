@@ -11,7 +11,6 @@ import java.io.File;
 import java.text.Normalizer;
 
 public class OCRThread implements Runnable {
-    private File file;
     private String filePath;
     private Message message;
     private Logger logger;
@@ -24,7 +23,7 @@ public class OCRThread implements Runnable {
 
     public void run(){
         int exceptionCount = 0;
-        file = null;
+        File file = null;
         while(exceptionCount < 10) {
             try {
                  file = new File(filePath);
@@ -51,9 +50,11 @@ public class OCRThread implements Runnable {
             long start = System.currentTimeMillis();
             String result = tesseract.doOCR(file);
             logger.createLog("Found " + result + " in image");
-            if(containsWord(result)){
+            RacismDetection detection = new RacismDetection(logger);
+            if(detection.containsWord(result)){
                 RestAction action = message.delete();
                 message.getChannel().sendMessage("Hey <@" + message.getAuthor().getId() + "> you can't say that").queue();
+                detection.increaseCount(message.getMember(), message.getGuild());
                 action.complete();
             }
             long end = System.currentTimeMillis();
@@ -63,20 +64,15 @@ public class OCRThread implements Runnable {
             te.printStackTrace();
         }catch(InterruptedException ie) {
             logger.createErrorLog("Could not pause thread");
-        } finally
+        }finally
         {
-            if(file.delete()){
+            if(file == null){
+                logger.createLog("File pointer is null");
+            }else if(file.delete()){
                 logger.createLog("Temp File Deleted");
             }else{
                 logger.createErrorLog("Could not delete file");
             }
         }
-    }
-
-    private boolean containsWord(String message) { //todo improve the detection method
-        message = Normalizer.normalize(message, Normalizer.Form.NFD);
-        message = message.replaceAll("[^A-za-z1]", "").toLowerCase();
-        return message.contains("nigg") || message.contains("nlgg") || message.contains("n1gg") ||
-                message.contains("n|gg") || message.contains("n/gger") || message.contains("n\\gger");
     }
 }
