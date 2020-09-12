@@ -3,7 +3,7 @@
 [ ![license-shield][] ][license]
 
 # A Discord Bot
-A simple discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even if sent in a vertical manner over multiple messages. 
+A discord bot that does some mild moderations such as keeping track of past names for people who spam name changes. Removes some very basic racism even if sent in a vertical manner over multiple messages. 
 
 Also has the ability to create links between words and youtube videos then whenever that word is typed the link is played in the channel that user is in. This is provided that the user has been in the channel for the required ammount of time. By default this is 5 seconds, this is to stop people from joining a channel and using a command to annoy the users in that channel.
 
@@ -39,4 +39,4 @@ Has a watchlist to notify the server when a select group of twitch streams goes 
 * [LavaPlayer](https://github.com/sedmelluq/lavaplayer) - A Java audio library
 * [JDA](https://github.com/DV8FromTheWorld/JDA) - A Java wrapper for Discord
 * [JSON-Java](https://github.com/stleary/JSON-java) - A JSON library for Java
-
+* [youtube-dl](https://github.com/ytdl-org/youtube-dl) - A video download libary that supports a lot of websites
