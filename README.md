@@ -40,3 +40,4 @@ Has a watchlist to notify the server when a select group of twitch streams goes 
 * [JDA](https://github.com/DV8FromTheWorld/JDA) - A Java wrapper for Discord
 * [JSON-Java](https://github.com/stleary/JSON-java) - A JSON library for Java
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl) - A video download libary that supports a lot of websites
+* [Tess4J](http://tess4j.sourceforge.net/) - Java wrapper for the Tesseract OCR API
