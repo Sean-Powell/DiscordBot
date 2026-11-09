@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20160810</version>
+            <version>20260719</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
